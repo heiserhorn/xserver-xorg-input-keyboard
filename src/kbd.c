@@ -1,4 +1,4 @@
-/* $XdotOrg$ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.2 2004/04/23 19:54:03 eich Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg$ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.2 2004/04/23 19:54:03 eich Exp $ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -58,17 +58,6 @@ static void PostKbdEvent(InputInfoPtr pInfo, unsigned int key, Bool down);
 static void InitKBD(InputInfoPtr pInfo, Bool init);
 static void SetXkbOption(InputInfoPtr pInfo, char *name, char **option);
 static void UpdateLeds(InputInfoPtr pInfo);
-
-#undef KEYBOARD
-InputDriverRec KEYBOARD = {
-	1,
-	"kbd",
-	NULL,
-	KbdPreInit,
-	NULL,
-	NULL,
-	0
-};
 
 typedef enum {
     OPTION_ALWAYS_CORE,
@@ -720,7 +709,17 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 }
 
 #ifdef XFree86LOADER
-ModuleInfoRec KeyboardInfo = {
+InputDriverRec KBD = {
+	1,
+	"kbd",
+	NULL,
+	KbdPreInit,
+	NULL,
+	NULL,
+	0
+};
+
+ModuleInfoRec KbdInfo = {
     1,
     "KBD",
     NULL,
@@ -746,15 +745,15 @@ xf86KbdPlug(pointer	module,
 #ifndef REMOVE_LOADER_CHECK_MODULE_INFO
 	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
 #endif
-	xf86AddModuleInfo(&KeyboardInfo, module);
+	xf86AddModuleInfo(&KbdInfo, module);
     }
 
-    xf86AddInputDriver(&KEYBOARD, module, 0);
+    xf86AddInputDriver(&KBD, module, 0);
 
     return module;
 }
 
-static XF86ModuleVersionInfo xf86KeyboardVersionRec =
+static XF86ModuleVersionInfo xf86KbdVersionRec =
 {
     "kbd",
     MODULEVENDORSTRING,
@@ -769,8 +768,78 @@ static XF86ModuleVersionInfo xf86KeyboardVersionRec =
 				/* a tool */
 };
 
-XF86ModuleData kbdModuleData = {&xf86KeyboardVersionRec,
-				     xf86KbdPlug,
-				     xf86KbdUnplug};
+XF86ModuleData kbdModuleData = {
+    &xf86KbdVersionRec,
+    xf86KbdPlug,
+    xf86KbdUnplug
+};
+
+
+/* Compatibility section: we have a set of module structures here that
+ * allows us to load this module as the old keyboard driver. */
+
+#ifndef USE_DEPRECATED_KEYBOARD_DRIVER
+
+InputDriverRec KEYBOARD = {
+	1,
+	"keyboard",
+	NULL,
+	KbdPreInit,
+	NULL,
+	NULL,
+	0
+};
+
+ModuleInfoRec KeyboardInfo = {
+    1,
+    "KEYBOARD",
+    NULL,
+    0,
+    KeyboardAvailableOptions,
+};
+
+static pointer
+xf86KeyboardPlug(pointer	module,
+                 pointer	options,
+                 int		*errmaj,
+                 int		*errmin)
+{
+    static Bool Initialised = FALSE;
+
+    if (!Initialised) {
+	Initialised = TRUE;
+#ifndef REMOVE_LOADER_CHECK_MODULE_INFO
+	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
+#endif
+	xf86AddModuleInfo(&KeyboardInfo, module);
+    }
+
+    xf86AddInputDriver(&KEYBOARD, module, 0);
+
+    return module;
+}
+
+static XF86ModuleVersionInfo xf86KeyboardVersionRec =
+{
+    "keyboard",
+    MODULEVENDORSTRING,
+    MODINFOSTRING1,
+    MODINFOSTRING2,
+    XORG_VERSION_CURRENT,
+    1, 0, 0,
+    ABI_CLASS_XINPUT,
+    ABI_XINPUT_VERSION,
+    MOD_CLASS_XINPUT,
+    {0, 0, 0, 0}		/* signature, to be patched into the file by */
+				/* a tool */
+};
+
+XF86ModuleData keyboardModuleData = {
+    &xf86KeyboardVersionRec,
+    xf86KeyboardPlug,
+    xf86KbdUnplug
+};
+
+#endif /* ! USE_DEPRECATED_KEYBOARD_DRIVER */
 
 #endif /* XFree86LOADER */
