@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.3 2004/08/16 20:17:52 kem Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.4 2004/08/16 22:48:51 kem Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.3 2004/08/16 20:17:52 kem Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.4 2004/08/16 22:48:51 kem Exp $ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -69,7 +69,6 @@ InputDriverRec KBD = {
 	0
 };
 
-#ifndef USE_DEPRECATED_KEYBOARD_DRIVER
 InputDriverRec KEYBOARD = {
 	1,
 	"keyboard",
@@ -79,7 +78,6 @@ InputDriverRec KEYBOARD = {
 	NULL,
 	0
 };
-#endif
 
 typedef enum {
     OPTION_ALWAYS_CORE,
