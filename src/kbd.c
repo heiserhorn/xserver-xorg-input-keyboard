@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2004/12/06 21:51:11 herrb Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.9 2005/01/10 17:44:39 eich Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2004/12/06 21:51:11 herrb Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.9 2005/01/10 17:44:39 eich Exp $ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -204,6 +204,10 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
     pInfo->type_name = XI_KEYBOARD;
     pInfo->flags = XI86_KEYBOARD_CAPABLE;
     pInfo->device_control = KbdProc;
+    /*
+     * We don't specify our own read_input function. We expect
+     * an OS specific readInput() function to handle this.
+     */
     pInfo->read_input = NULL;
     pInfo->motion_history_proc = NULL;
     pInfo->history_size = 0;
@@ -537,6 +541,10 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   unsigned long changeLock = 0;
   static int  lockkeys = 0;
 
+#ifdef DEBUG
+  ErrorF("kbd driver rec scancode: 0x02%x %s\n", scanCode, down?"down":"up");
+#endif
+	  
   /* Disable any keyboard processing while in suspend */
   if (xf86inSuspend)
       return;
