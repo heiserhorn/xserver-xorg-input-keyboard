@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.2 2004/04/23 19:54:03 eich Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.3 2004/08/16 20:17:52 kem Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.2 2004/04/23 19:54:03 eich Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.3 2004/08/16 20:17:52 kem Exp $ */
   
 #define NEED_EVENTS
 #include "X.h"
@@ -58,6 +58,28 @@ static void PostKbdEvent(InputInfoPtr pInfo, unsigned int key, Bool down);
 static void InitKBD(InputInfoPtr pInfo, Bool init);
 static void SetXkbOption(InputInfoPtr pInfo, char *name, char **option);
 static void UpdateLeds(InputInfoPtr pInfo);
+
+InputDriverRec KBD = {
+	1,
+	"kbd",
+	NULL,
+	KbdPreInit,
+	NULL,
+	NULL,
+	0
+};
+
+#ifndef USE_DEPRECATED_KEYBOARD_DRIVER
+InputDriverRec KEYBOARD = {
+	1,
+	"keyboard",
+	NULL,
+	KbdPreInit,
+	NULL,
+	NULL,
+	0
+};
+#endif
 
 typedef enum {
     OPTION_ALWAYS_CORE,
@@ -709,16 +731,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 }
 
 #ifdef XFree86LOADER
-InputDriverRec KBD = {
-	1,
-	"kbd",
-	NULL,
-	KbdPreInit,
-	NULL,
-	NULL,
-	0
-};
-
 ModuleInfoRec KbdInfo = {
     1,
     "KBD",
@@ -779,16 +791,6 @@ XF86ModuleData kbdModuleData = {
  * allows us to load this module as the old keyboard driver. */
 
 #ifndef USE_DEPRECATED_KEYBOARD_DRIVER
-
-InputDriverRec KEYBOARD = {
-	1,
-	"keyboard",
-	NULL,
-	KbdPreInit,
-	NULL,
-	NULL,
-	0
-};
 
 ModuleInfoRec KeyboardInfo = {
     1,
