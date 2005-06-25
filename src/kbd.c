@@ -59,7 +59,7 @@ static void InitKBD(InputInfoPtr pInfo, Bool init);
 static void SetXkbOption(InputInfoPtr pInfo, char *name, char **option);
 static void UpdateLeds(InputInfoPtr pInfo);
 
-InputDriverRec KBD = {
+_X_EXPORT InputDriverRec KBD = {
 	1,
 	"kbd",
 	NULL,
@@ -69,7 +69,7 @@ InputDriverRec KBD = {
 	0
 };
 
-InputDriverRec KEYBOARD = {
+_X_EXPORT InputDriverRec KEYBOARD = {
 	1,
 	"keyboard",
 	NULL,
@@ -802,7 +802,7 @@ static XF86ModuleVersionInfo xf86KbdVersionRec =
 				/* a tool */
 };
 
-XF86ModuleData kbdModuleData = {
+_X_EXPORT XF86ModuleData kbdModuleData = {
     &xf86KbdVersionRec,
     xf86KbdPlug,
     xf86KbdUnplug
@@ -858,7 +858,7 @@ static XF86ModuleVersionInfo xf86KeyboardVersionRec =
 				/* a tool */
 };
 
-XF86ModuleData keyboardModuleData = {
+_X_EXPORT XF86ModuleData keyboardModuleData = {
     &xf86KeyboardVersionRec,
     xf86KeyboardPlug,
     xf86KbdUnplug
