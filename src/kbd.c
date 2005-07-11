@@ -13,6 +13,10 @@
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
 /* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.13 2005/06/25 21:17:02 ajax Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
   
 #define NEED_EVENTS
 #include <X11/X.h>
