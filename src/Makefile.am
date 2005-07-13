@@ -29,3 +29,9 @@
 @DRIVER_NAME@_drv_ladir = @inputdir@
 
 @DRIVER_NAME@_drv_la_SOURCES = @DRIVER_NAME@.c
+
+@COMPAT_DRIVER_NAME@_drv_la_LTLIBRARIES = @COMPAT_DRIVER_NAME@_drv.la
+@COMPAT_DRIVER_NAME@_drv_la_LDFLAGS = -module -avoid-version
+@COMPAT_DRIVER_NAME@_drv_ladir = @inputdir@
+
+@COMPAT_DRIVER_NAME@_drv_la_SOURCES = @DRIVER_NAME@.c

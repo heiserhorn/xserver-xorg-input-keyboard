@@ -27,15 +27,18 @@ AC_INIT([xf86-input-keyboard],
         xf86-input-keyboard)
 
 AC_CONFIG_SRCDIR([Makefile.am])
+AC_CONFIG_AUX_DIR(.)
 AM_INIT_AUTOMAKE([dist-bzip2])
 
 AM_MAINTAINER_MODE
 
-DRIVER_NAME=keyboard
+DRIVER_NAME=kbd
 AC_SUBST([DRIVER_NAME])
 
+COMPAT_DRIVER_NAME=keyboard
+AC_SUBST([COMPAT_DRIVER_NAME])
+
 AM_CONFIG_HEADER([config.h])
-AC_CONFIG_AUX_DIR(.)
 
 # Checks for programs.
 AC_PROG_LIBTOOL
@@ -61,14 +64,20 @@ AH_TOP([#include "xorg-server.h"])
 #    AC_DEFINE(XKB,1,[Enable XKB support])
 #fi
 
+AC_ARG_ENABLE(depkbd, AS_HELP_STRING([--enable-depkbd],
+              [Use deprecated keyboard driver [[default=no]]]),
+              [DEPKBD=$enableval],[DEPKBD=no])
+if test "x$DEPKBD" = "xyes" ; then
+    AC_DEFINE(USE_DEPRECATED_KEYBOARD_DRIVER,1,[Use deprecated keyboard driver])
+fi
+
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XORG, xorg-server)
+PKG_CHECK_MODULES(XORG, xorg-server xproto)
 inputdir=$(pkg-config --variable=moduledir xorg-server)/input
 AC_SUBST([inputdir])
 sdkdir=$(pkg-config --variable=sdkdir xorg-server)
 
 CFLAGS="$XORG_CFLAGS "' -I$(top_srcdir)/src'
-INCLUDES="$XORG_INCS -I${sdkdir} "'-I$(top_srcdir)/src -I$(prefix)/include'
 AC_SUBST([CFLAGS])
 AC_SUBST([INCLUDES])
 
