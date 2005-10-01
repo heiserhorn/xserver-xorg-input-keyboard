@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.13 2005/06/25 21:17:02 ajax Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.16 2005/07/13 12:30:04 alanh Exp $ */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
 
 /*
@@ -12,7 +12,7 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.13 2005/06/25 21:17:02 ajax Exp $ */
+/* $XdotOrg: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.16 2005/07/13 12:30:04 alanh Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,9 @@
 #include <X11/extensions/XKBstr.h>
 #include <X11/extensions/XKBsrv.h>
 #endif
+
+extern int XkbDfltRepeatDelay;
+extern int XkbDfltRepeatInterval;
 
 #define CAPSFLAG	1
 #define NUMFLAG		2
@@ -157,6 +160,12 @@ static const char *kbd98Defaults[] = {
     NULL
 };
 
+const char *xkbSymbols[] = {
+	"XkbDfltRepeatDelay",
+	"XkbDfltRepeatInterval",
+	NULL,
+};
+
 #ifdef XKB
 static char *xkb_rules;
 static char *xkb_model;
@@ -238,6 +247,8 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
     pInfo->private = pKbd;
     pKbd->PostEvent = PostKbdEvent;
 
+    xf86LoaderReqSymLists(xkbSymbols, NULL);
+
     if (!xf86OSKbdPreInit(pInfo))
         return pInfo;
 
@@ -251,7 +262,9 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
             xf86Msg(X_ERROR, "\"%s\" is not a valid AutoRepeat value", s);
         } else {
             pKbd->delay = delay;
+	    XkbDfltRepeatDelay = delay;
             pKbd->rate = rate;
+	    XkbDfltRepeatInterval = 1000/rate;
         }
         xfree(s);
     }
