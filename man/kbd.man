@@ -1,3 +1,4 @@
+.\" $XdotOrg: $
 .\" $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/keyboard.man,v 1.2 2001/01/27 18:20:57 dawes Exp $ 
 .\" shorthand for double quote that works everywhere.
 .ds q \N'34'
@@ -16,10 +17,10 @@ kbd \- Keyboard input driver
 .B kbd 
 is an __xservername__ input driver for keyboards.  The driver supports the standard
 OS-provided keyboard interface, but these are currently only available to
-this driver module for Linux and BSD.  This driver is experimental, but
-will soon replace the built-in
+this driver module for Linux, BSD, and Solaris.  This driver is planned to
+replace the built-in
 .B keyboard
-driver.
+driver in a future release of __xservername__.
 .PP
 The
 .B kbd
