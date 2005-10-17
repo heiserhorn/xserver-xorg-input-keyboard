@@ -93,6 +93,7 @@ AC_SUBST([CFLAGS])
 # Checks for header files.
 AC_HEADER_STDC
 
+XORG_MANPAGE_SECTIONS
 XORG_RELEASE_VERSION
 
 AC_OUTPUT([Makefile src/Makefile man/Makefile])
