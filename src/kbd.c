@@ -139,7 +139,11 @@ static const OptionInfoRec KeyboardOptions[] = {
 #endif
 
 static const char *kbdDefaults[] = {
+#ifdef XQUEUE 
+    "Protocol",		"Xqueue",
+#else
     "Protocol",		"standard",
+#endif
     "AutoRepeat",	"500 30",
     "XkbRules",		__XKBDEFRULES__,
     "XkbModel",		"pc105",
@@ -150,7 +154,11 @@ static const char *kbdDefaults[] = {
 };
 
 static const char *kbd98Defaults[] = {
+#ifdef XQUEUE
+    "Protocol",		"Xqueue",
+#else
     "Protocol",		"standard",
+#endif
     "AutoRepeat",	"500 30",
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
