@@ -89,7 +89,6 @@ XORG_DRIVER_CHECK_EXT(XKB, kbproto)
 
 # Checks for pkg-config packages
 PKG_CHECK_MODULES(XORG, xorg-server xproto $REQUIRED_MODULES)
-AC_MSG_RESULT([yes])
 sdkdir=$(pkg-config --variable=sdkdir xorg-server)
 
 CFLAGS="$CFLAGS $XORG_CFLAGS "' -I$(top_srcdir)/src'
