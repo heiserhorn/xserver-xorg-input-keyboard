@@ -1,3 +1,9 @@
+2005-12-19  Alan Coopersmith  <alan.coopersmith@sun.com>
+
+	* man/kbd.man: 
+	* man/keyboard.man:
+	Correct documentation of XKB default settings
+	
 2005-12-14  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* configure.ac:

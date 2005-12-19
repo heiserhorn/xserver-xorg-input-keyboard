@@ -72,13 +72,12 @@ specifies which XKB rules file to use for interpreting the
 .BR XkbVariant ,
 and
 .B XkbOptions
-settings.  Default: "xfree86" for most platforms, but "xfree98" for the
+settings.  Default: "xorg" for most platforms, but "xfree98" for the
 Japanese PC-98 platforms.
 .TP 7
 .BI "Option \*qXkbModel\*q \*q" modelname \*q
-specifies the XKB keyboard model name.  Default: "pc101" for most platforms,
-but "pc98" for the Japanese PC-98 platforms, and "pc101_sol8x86" for
-Solaris 8 on x86.
+specifies the XKB keyboard model name.  Default: "pc105" for most platforms,
+but "pc98" for the Japanese PC-98 platforms.
 .TP 7
 .BI "Option \*qXkbLayout\*q \*q" layoutname \*q
 specifies the XKB keyboard layout name.  This is usually the country or
