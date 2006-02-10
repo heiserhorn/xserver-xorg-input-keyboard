@@ -1,4 +1,4 @@
-Source: xorg-input-driver-keyboard
+Source: xserver-xorg-input-keyboard
 Section: x11
 Priority: optional
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
@@ -6,10 +6,10 @@ Uploaders: David Nusinow <dnusinow@debian.org>, Branden Robinson <branden@ debia
 Build-Depends: debhelper (>= 4.0.0), pkg-config, xserver-xorg-dev, x11proto-kb-dev, x11proto-input-dev, x11proto-core-dev, x11proto-randr-dev
 Standards-Version: 3.6.1.0
 
-Package: xorg-input-driver-kbd
+Package: xserver-xorg-input-kbd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Provides: xorg-input-driver
+Provides: xserver-xorg-input
 Replaces: xserver-xorg (<< 6.8.2-35)
 Description: X.Org X server -- keyboard input driver
  This package provides the driver for keyboard input devices.
