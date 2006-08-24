@@ -1,10 +1,17 @@
-xserver-xorg-input-keyboard (1:1.0.1.3-3) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.1.0-1) experimental; urgency=low
 
+  [ Andres Salomon ]
   * Test for obj-$(DEB_BUILD_GNU_TYPE) before creating it during build;
     idempotency fix.
   * Run dh_install w/ --list-missing.
 
- -- Andres Salomon <dilinger@debian.org>  Mon, 17 Jul 2006 01:07:06 -0400
+  [ Drew Parsons ]
+  * New upstream version xf86-input-keyboard-1.1.0.
+  * Standards version 3.7.2.
+  * Use debhelper 5.  Install manpage using dh_installman.
+  * Exclude .la files from dh_install.
+
+ -- Drew Parsons <dparsons@debian.org>  Fri, 25 Aug 2006 00:47:52 +1000
 
 xserver-xorg-input-keyboard (1:1.0.1.3-2) unstable; urgency=low
 
