@@ -1,8 +1,9 @@
-xserver-xorg-input-keyboard (1:1.1.0-2) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.1.0-2) unstable; urgency=low
 
   * Build-Depends: xserver-xorg-dev (>= 2:1.1.1-4). Closes: #387146.
+  * Upload to unstable (X11R7.1 transition).
 
- -- Drew Parsons <dparsons@debian.org>  Wed, 13 Sep 2006 19:38:48 +1000
+ -- Drew Parsons <dparsons@debian.org>  Sat, 23 Sep 2006 09:40:57 +1000
 
 xserver-xorg-input-keyboard (1:1.1.0-1) experimental; urgency=low
 
