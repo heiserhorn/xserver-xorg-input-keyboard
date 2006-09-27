@@ -4,10 +4,12 @@ xserver-xorg-input-keyboard (1:1.1.0-3) unstable; urgency=low
   * Add watch file
 
   [ David Nusinow ]
-  * Add 01_64bit_pointer.diff to include to correct pointer size on 64 bit 
+  * Add 01_64bit_pointer.diff to include to correct pointer size on 64 bit
     arches. Thanks Dann Frazier. (closes: #389514)
+  * Turn the above patch in to one pulled from upstream to include more
+    missing headers.
 
- -- David Nusinow <dnusinow@debian.org>  Wed, 27 Sep 2006 19:48:36 -0400
+ -- David Nusinow <dnusinow@debian.org>  Wed, 27 Sep 2006 19:53:10 -0400
 
 xserver-xorg-input-keyboard (1:1.1.0-2) unstable; urgency=low
 
