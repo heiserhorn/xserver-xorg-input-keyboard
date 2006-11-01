@@ -114,7 +114,6 @@ typedef enum {
     OPTION_CUSTOM_KEYCODES
 } KeyboardOpts;
 
-#ifdef XFree86LOADER
 /* These aren't actually used ... */
 static const OptionInfoRec KeyboardOptions[] = {
     { OPTION_ALWAYS_CORE,	"AlwaysCore",	  OPTV_BOOLEAN,	{0}, FALSE },
@@ -140,7 +139,6 @@ static const OptionInfoRec KeyboardOptions[] = {
     { OPTION_CUSTOM_KEYCODES,   "CustomKeycodes", OPTV_BOOLEAN,	{0}, FALSE },
     { -1,			NULL,		  OPTV_NONE,	{0}, FALSE }
 };
-#endif
 
 static const char *kbdDefaults[] = {
 #ifdef XQUEUE 
@@ -188,14 +186,12 @@ static char *xkb_options;
 static XkbComponentNamesRec xkbnames;
 #endif /* XKB */
 
-#ifdef XFree86LOADER
 /*ARGSUSED*/
 static const OptionInfoRec *
 KeyboardAvailableOptions(void *unused)
 {
     return (KeyboardOptions);
 }
-#endif
 
 static void
 SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
@@ -234,8 +230,6 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
      * an OS specific readInput() function to handle this.
      */
     pInfo->read_input = NULL;
-    pInfo->motion_history_proc = NULL;
-    pInfo->history_size = 0;
     pInfo->control_proc = NULL;
     pInfo->close_proc = NULL;
     pInfo->switch_mode = NULL;
@@ -795,7 +789,6 @@ sunKeyboards:
    }
 }
 
-#ifdef XFree86LOADER
 ModuleInfoRec KbdInfo = {
     1,
     "KBD",
@@ -850,63 +843,3 @@ _X_EXPORT XF86ModuleData kbdModuleData = {
     xf86KbdPlug,
     xf86KbdUnplug
 };
-
-
-/* Compatibility section: we have a set of module structures here that
- * allows us to load this module as the old keyboard driver. */
-
-#ifndef USE_DEPRECATED_KEYBOARD_DRIVER
-
-ModuleInfoRec KeyboardInfo = {
-    1,
-    "KEYBOARD",
-    NULL,
-    0,
-    KeyboardAvailableOptions,
-};
-
-static pointer
-xf86KeyboardPlug(pointer	module,
-                 pointer	options,
-                 int		*errmaj,
-                 int		*errmin)
-{
-    static Bool Initialised = FALSE;
-
-    if (!Initialised) {
-	Initialised = TRUE;
-#ifndef REMOVE_LOADER_CHECK_MODULE_INFO
-	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
-#endif
-	xf86AddModuleInfo(&KeyboardInfo, module);
-    }
-
-    xf86AddInputDriver(&KEYBOARD, module, 0);
-
-    return module;
-}
-
-static XF86ModuleVersionInfo xf86KeyboardVersionRec =
-{
-    "keyboard",
-    MODULEVENDORSTRING,
-    MODINFOSTRING1,
-    MODINFOSTRING2,
-    XORG_VERSION_CURRENT,
-    1, 0, 0,
-    ABI_CLASS_XINPUT,
-    ABI_XINPUT_VERSION,
-    MOD_CLASS_XINPUT,
-    {0, 0, 0, 0}		/* signature, to be patched into the file by */
-				/* a tool */
-};
-
-_X_EXPORT XF86ModuleData keyboardModuleData = {
-    &xf86KeyboardVersionRec,
-    xf86KeyboardPlug,
-    xf86KbdUnplug
-};
-
-#endif /* ! USE_DEPRECATED_KEYBOARD_DRIVER */
-
-#endif /* XFree86LOADER */
