@@ -21,7 +21,7 @@
 driverdir = @inputdir@
 driver_LTLIBRARIES = kbd_drv.la
 kbd_drv_la_LDFLAGS = -avoid-version -module
-kbd_drv_la_SOURCES = kbd.c
+kbd_drv_la_SOURCES = kbd.c xf86OSKbd.h
 
 BSD_SOURCES = bsd_KbdMap.c bsd_kbd.c bsd_kbd.h at_scancode.c
 HURD_SOURCES = hurd_kbd.c at_scancode.c
@@ -30,24 +30,23 @@ SCO_SOURCES = sco_KbdMap.c sco_kbd.c sco_kbd.h
 SOLARIS_SOURCES = sun_kbd.c sun_kbd.h sun_kbdEv.c
 
 if BSD
-kbd_drv_la_SOURCES += $(BSD_SOURCES)
+kbd_drv_la_SOURCES += $(BSD_SRCS)
 endif
 
 if SOLARIS
-kbd_drv_la_SOURCES += $(SOLARIS_SOURCES)
+kbd_drv_la_SOURCES += $(SOLARIS_SRCS)
 endif
 
 if LINUX
-kbd_drv_la_SOURCES += $(LINUX_SOURCES)
+kbd_drv_la_SOURCES += $(LINUX_SRCS)
 endif
 
 if SCO
-kbd_drv_la_SOURCES += $(SCO_SOURCES)
+kbd_drv_la_SOURCES += $(SCO_SRCS)
 endif
 
 if HURD
-kbd_drv_la_SOURCES += $(HURD_SOURCES)
+kbd_drv_la_SOURCES += $(HURD_SRCS)
 endif
 
-EXTRA_DIST = $(BSD_SOURCES) $(HURD_SOURCES) $(LINUX_SOURCES) $(SCO_SOURCES) \
-             $(SOLARIS_SOURCES)
+EXTRA_DIST = $(BSD_SRCS) $(HURD_SRCS) $(LINUX_SRCS) $(SCO_SRCS) $(SOLARIS_SRCS)
