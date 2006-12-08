@@ -419,6 +419,8 @@ InitKBD(InputInfoPtr pInfo, Bool init)
   kevent.u.keyButtonPointer.rootX = 0;
   kevent.u.keyButtonPointer.rootY = 0;
 
+/* The server does this for us with i-h. */
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 1
   /*
    * Hmm... here is the biggest hack of every time !
    * It may be possible that a switch-vt procedure has finished BEFORE
@@ -448,6 +450,8 @@ InitKBD(InputInfoPtr pInfo, Bool init)
           (* pKeyboard->public.processInputProc)(&kevent, pKeyboard, 1);
         }
       }
+#endif
+
   pKbd->scanPrefix      = 0;
 
   if (init) {
