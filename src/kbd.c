@@ -383,7 +383,22 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
    InputInfoPtr pInfo = (InputInfoPtr) device->public.devicePrivate;
    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
 
-   if ( ctrl->leds & XCOMP ) {
+   if ( ctrl->leds & XLED1) {
+       pKbd->keyLeds |= CAPSFLAG;
+   } else {
+       pKbd->keyLeds &= ~CAPSFLAG;
+   }
+   if ( ctrl->leds & XLED2) {
+       pKbd->keyLeds |= NUMFLAG;
+   } else {
+       pKbd->keyLeds &= ~NUMFLAG;
+   }
+   if ( ctrl->leds & XLED3) {
+       pKbd->keyLeds |= SCROLLFLAG;
+   } else {
+       pKbd->keyLeds &= ~SCROLLFLAG;
+   }
+   if ( ctrl->leds & (XCOMP|XLED4) ) {
        pKbd->keyLeds |= COMPOSEFLAG;
    } else {
        pKbd->keyLeds &= ~COMPOSEFLAG;
