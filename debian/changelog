@@ -5,8 +5,9 @@ xserver-xorg-input-keyboard (1:1.1.1-1) UNRELEASED; urgency=low
   * Add link to xserver-xorg-core bug script, so that bugreports contain
     the user's config and log files.
   * Generate the dependency on xserver-xorg-core automatically.
+  * Drop outdated CVS info from the description.
 
- -- Julien Cristau <jcristau@debian.org>  Sun, 18 Feb 2007 16:46:23 +0100
+ -- Julien Cristau <jcristau@debian.org>  Sun, 18 Feb 2007 16:49:28 +0100
 
 xserver-xorg-input-keyboard (1:1.1.0-4) unstable; urgency=low
 
