@@ -3,12 +3,12 @@ Section: x11
 Priority: optional
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Uploaders: David Nusinow <dnusinow@debian.org>, Branden Robinson <branden@debian.org>, Fabio M. Di Nitto <fabbione@fabbione.net>, Drew Parsons <dparsons@debian.org>
-Build-Depends: debhelper (>= 5), pkg-config, xserver-xorg-dev (>= 2:1.1.1-4), x11proto-kb-dev, x11proto-input-dev, x11proto-core-dev, x11proto-randr-dev, quilt
+Build-Depends: debhelper (>= 5), pkg-config, xserver-xorg-dev (>= 2:1.2.0-3), x11proto-kb-dev, x11proto-input-dev, x11proto-core-dev, x11proto-randr-dev, quilt
 Standards-Version: 3.7.2
 
 Package: xserver-xorg-input-kbd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, xserver-xorg-core (>= 2:1.1.1-11)
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${xserver:Depends}
 Provides: xserver-xorg-input
 Replaces: xserver-xorg (<< 6.8.2-35)
 Description: X.Org X server -- keyboard input driver
