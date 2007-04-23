@@ -1,51 +1,365 @@
-2006-04-06  Adam Jackson  <ajax@freedesktop.org>
+commit 3bfed2fc2e401bc4b5f74a3f20014d4a5c7dad30
+Author: Adam Jackson <ajax@benzedrine.nwnk.net>
+Date:   Fri Oct 13 18:26:38 2006 -0400
 
-	* configure.ac:
-	* src/kbd.c:
-	Unlibcwrap.  Bump server version requirement.  Bump to 1.1.0.
+    Bump to 1.1.1
 
-2005-12-20  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+commit d3c6014290a90a985679c9258fe65be3d89bf7b9
+Author: Tilman Sauerbeck <tilman@code-monkey.de>
+Date:   Sun Jul 9 19:57:36 2006 +0200
 
-	* configure.ac:
-	Update package version for X11R7 release.
+    Added some missing includes.
 
-2005-12-19  Alan Coopersmith  <alan.coopersmith@sun.com>
+commit c94229993dc2a8672802ef8ab35717089b74ab80
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Fri Apr 7 17:47:17 2006 +0000
 
-	* man/kbd.man: 
-	* man/keyboard.man:
-	Correct documentation of XKB default settings
-	
-2005-12-14  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Unlibcwrap. Bump server version requirement. Bump to 1.1.0.
 
-	* configure.ac:
-	Update package version number for final X11R7 release candidate.
+commit 01744910cd7c4034fa1dd14ef734d7087832647d
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Dec 21 02:29:57 2005 +0000
 
-2005-12-06  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Update package version for X11R7 release.
 
-	* man/Makefile.am:
-	Change *man_SOURCES ==> *man_PRE to fix autotools warnings.
+commit 9bd0521c65760d4e555ac992a92ce74ce8d55437
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Mon Dec 19 16:25:51 2005 +0000
 
-2005-12-03  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Stub COPYING files
 
-	* configure.ac:
-	Update package version number for X11R7 RC3 release.
+commit 75d352b91ff79b5b55dbd7c5d3952470de87704f
+Author: Alan Coopersmith <Alan.Coopersmith@sun.com>
+Date:   Mon Dec 19 09:07:50 2005 +0000
 
-2005-12-01  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Typo fixes, mailing list & url updates, and other changes to prepare for
+        X11R6.9 & 7.0 releases.
 
-	* configure.ac:
-	Remove extraneous AC_MSG_RESULT.
+commit 29309dd08deb535262625c2eb73558c6eae69336
+Author: Kevin E Martin <kem@kem.org>
+Date:   Thu Dec 15 00:24:14 2005 +0000
 
-2005-11-29  Adam Jackson  <ajax@freedesktop.org>
+    Update package version number for final X11R7 release candidate.
 
-	* configure.ac:
-	Only build dlloader modules by default.
+commit a459e2028834e76e21117070d073cc9489b0d65f
+Author: Kevin E Martin <kem@kem.org>
+Date:   Tue Dec 6 22:48:30 2005 +0000
 
-2005-11-09  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Change *man_SOURCES ==> *man_PRE to fix autotools warnings.
 
-	* configure.ac:
-	Update package version number for X11R7 RC2 release.
+commit 9c5c0e3d211fcce658aa667d8be7f979b9cb83cd
+Author: Kevin E Martin <kem@kem.org>
+Date:   Sat Dec 3 05:49:31 2005 +0000
 
-2005-11-01  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+    Update package version number for X11R7 RC3 release.
 
-	* configure.ac:
-	Update pkgcheck dependencies to work with separate build roots.
+commit edb6ec6c311543686230a43885183071e92dc60d
+Author: Kevin E Martin <kem@kem.org>
+Date:   Fri Dec 2 02:16:05 2005 +0000
+
+    Remove extraneous AC_MSG_RESULT.
+
+commit 0721c4b4a75fe836d17445550746ed415f06d126
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Tue Nov 29 23:29:56 2005 +0000
+
+    Only build dlloader modules by default.
+
+commit 9885aa10eeb6e42212a0e21861790b72adc3ce71
+Author: Alan Coopersmith <Alan.Coopersmith@sun.com>
+Date:   Mon Nov 28 22:04:07 2005 +0000
+
+    Change *mandir targets to use new *_MAN_DIR variables set by xorg-macros.m4
+        update to fix bug #5167 (Linux prefers *.1x man pages in man1 subdir)
+
+commit ec4425c0ddb1dd45fb24e3984d490a68ff211b08
+Author: Eric Anholt <anholt@freebsd.org>
+Date:   Mon Nov 21 10:49:05 2005 +0000
+
+    Add .cvsignores for drivers.
+
+commit e5451950a80744b183f5e8f4259ff2e596952a13
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Nov 9 21:31:23 2005 +0000
+
+    Bump version numbers for X11R6.9/X11R7 RC2.
+
+commit 066e7c7d2768dec2c033a2ce723abbe31495f6d0
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Nov 9 21:15:12 2005 +0000
+
+    Update package version number for X11R7 RC2 release.
+
+commit 4442fdf90f51cc265679b61cc341f6ed32e134a1
+Author: Kean Johnson <kean@armory.com>
+Date:   Tue Nov 8 06:33:28 2005 +0000
+
+    See ChangeLog entry 2005-11-07 for details.
+
+commit 85dfda745021f49f01424d6a01c6396865d1723d
+Author: Kevin E Martin <kem@kem.org>
+Date:   Tue Nov 1 15:08:50 2005 +0000
+
+    Update pkgcheck depedencies to work with separate build roots.
+
+commit 288c4a7f79b9fb4b0531fe7cf21dec7f7f4a3668
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Oct 19 02:48:00 2005 +0000
+
+    Update package version number for RC1 release.
+
+commit 4861d1586d6ce54a8563047fa01016b658517d8f
+Author: Kevin E Martin <kem@kem.org>
+Date:   Tue Oct 18 15:46:36 2005 +0000
+
+    Do the following to make the drivers pass distcheck:
+    - Only define EXTRA_DIST when there are actually man pages to be processed
+    - Add missing man pages to keyboard and ati drivers EXTRA_DIST
+
+commit f7e91cad97e22e05b87de3d16a0f4299ea471a88
+Author: Alan Coopersmith <Alan.Coopersmith@sun.com>
+Date:   Tue Oct 18 00:01:51 2005 +0000
+
+    Use @DRIVER_MAN_SUFFIX@ instead of $(DRIVER_MAN_SUFFIX) in macro
+        substitutions to work better with BSD make
+
+commit 9e5a8ec5b63ec730916c0312cf6d65c26fd138d5
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Mon Oct 17 22:57:28 2005 +0000
+
+    More 1.7 braindamage: define EXTRA_DIST in terms of @DRIVER_NAME@ instead
+        of indirectly
+
+commit f06abf1decb60bdaf453b0d73f05f45b833b843a
+Author: Alan Coopersmith <Alan.Coopersmith@sun.com>
+Date:   Mon Oct 17 00:08:58 2005 +0000
+
+    Use sed & cpp to substitute variables in driver man pages
+
+commit 8668a70c065a3cba91a0f4b75c34c4478099bedd
+Author: Alan Coopersmith <Alan.Coopersmith@sun.com>
+Date:   Sun Oct 16 19:01:25 2005 +0000
+
+    Remove note about kbd being experimental. Add Solaris to supported OS list
+        for kbd.
+    Add note about plans to move to kbd in a future release.
+
+commit a228e916cc1ffa85446c95a6c42380b39d67b9f6
+Author: Matthieu Herrb <matthieu.herrb@laas.fr>
+Date:   Sat Oct 1 17:30:58 2005 +0000
+
+    Bug #3411: fix handling of keyboard Autorepeat rate in xorg.conf.
+
+commit 66693592a767baabca9eae015b57e9c6660a080b
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Thu Aug 18 09:03:39 2005 +0000
+
+    Update autogen.sh to one that does objdir != srcdir.
+
+commit ea7e6dfb03714a48edfb04053ac49f71f553872d
+Author: SÃ¸ren Sandmann Pedersen <sandmann@daimi.au.dk>
+Date:   Wed Aug 10 14:07:23 2005 +0000
+
+    Don\'t lose existing CFLAGS in all the input drivers and some of the video
+        drivers
+
+commit 8f930fc988f0d43bf2d964721e846fcf5fed6e4b
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Tue Aug 2 00:51:34 2005 +0000
+
+    AS_HELP_STRING workaround
+
+commit c392a4c091e70d42b498f9e8a55737feedbe2871
+Author: Kevin E Martin <kem@kem.org>
+Date:   Fri Jul 29 21:22:41 2005 +0000
+
+    Various changes preparing packages for RC0:
+    - Verify and update package version numbers as needed
+    - Implement versioning scheme
+    - Change bug address to point to bugzilla bug entry form
+    - Disable loadable i18n in libX11 by default (use --enable-loadable-i18n to
+        reenable it)
+    - Fix makedepend to use pkgconfig and pass distcheck
+    - Update build script to build macros first
+    - Update modular Xorg version
+
+commit b1379685a2fce1f1b2092814d3170cc29f4fd039
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Jul 13 20:03:22 2005 +0000
+
+    Make the module dir configurable
+
+commit 9f91bf7017f10ed23e2d313e47934d803e292dbc
+Author: Alan Hourihane <alanh@fairlite.demon.co.uk>
+Date:   Wed Jul 13 12:30:04 2005 +0000
+
+    //bugs.freedesktop.org/show_bug.cgi?id=2587> Fix keyboard mapping on Sun
+        keyboards in the keyboard module.
+
+commit da10828e418bc7fdbdcd03162ee92b0a999a11b7
+Author: Kevin E Martin <kem@kem.org>
+Date:   Wed Jul 13 02:21:00 2005 +0000
+
+    Update all input drivers to pass distcheck
+
+commit c9b223867b4922c646dd85c7468b8f79bf5257d5
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Tue Jul 12 06:15:09 2005 +0000
+
+    Build skeletons for input drivers. Should basically work.
+
+commit c9097dd3204d4fe2a3a21cec23948f27ec6292ed
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Mon Jul 11 02:38:00 2005 +0000
+
+    Prep input drivers for modularizing by adding guarded #include "config.h"
+
+commit 83efe32bd4a9372467680cafd5880438e551db31
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Fri Jul 1 22:43:22 2005 +0000
+
+    Change all misc.h and os.h references to <X11/foo.h>.
+
+commit ebf2b80b2027ebb99dbe44c7d77fd9f7a43f2e72
+Author: Adam Jackson <ajax@nwnk.net>
+Date:   Sat Jun 25 21:17:02 2005 +0000
+
+    Bug #3626: _X_EXPORT tags for video and input drivers.
+
+commit 3360f15f5f4cdd4a6cf204ff8af70a90c314ada3
+Author: Eric Anholt <anholt@freebsd.org>
+Date:   Tue May 10 00:12:17 2005 +0000
+
+    Bugzilla #2561: Disable some keycode translations on PC98, which had
+        various bad effects including modifier keys not working.
+
+commit 2ca94be67112a926721ef699f495bc158c4963a4
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Wed Apr 20 12:25:34 2005 +0000
+
+    Fix includes right throughout the Xserver tree:
+    change "foo.h" to <X11/foo.h> for core headers, e.g. X.h, Xpoll.h;
+    change "foo.h", "extensions/foo.h" and "X11/foo.h" to
+        <X11/extensions/foo.h> for extension headers, e.g. Xv.h;
+    change "foo.[ch]" to <X11/Xtrans/foo.[ch]> for Xtrans files.
+
+commit d157c2188389c84f3ee7594ddd0980f1a3553e97
+Author: Egbert Eich <eich@suse.de>
+Date:   Tue Jan 11 14:59:02 2005 +0000
+
+    Minor format fix.
+    Added explanatory comment and debug code.
+    Added comment.
+
+commit b7f68e909640008e831c2ddb67ca4fb9515cec04
+Author: Egbert Eich <eich@suse.de>
+Date:   Mon Jan 10 17:44:39 2005 +0000
+
+    PC keyboards internally generate a different scan code when the ALT
+        modifier is pressed with the SysReq/Print key. Since X expects the same
+        scancode regardless of the modifier the keyboard driver has to 'map the
+        code back'. So far it does so when seeing the SysReq scancode without
+        checking if the modifier is on. If this scancode is also sent by
+        another key on an extended keyboard it receives the same remapping.
+        Fix: Add check for ALT modifier down before doing the remapping (Helmut
+        Fahrion).
+
+commit b04ef340e213badb2e44fb669583b490f7278969
+Author: Matthieu Herrb <matthieu.herrb@laas.fr>
+Date:   Mon Dec 6 21:51:11 2004 +0000
+
+    Previous fix broke hardware-based autorepeat. This fix mimics the behaviour
+        of the legacy driver by making a local copy of the autoRepeat flag.
+
+commit db3b5cb60a71f2d5e536797559001dc59090ab6c
+Author: Matthieu Herrb <matthieu.herrb@laas.fr>
+Date:   Fri Dec 3 23:30:48 2004 +0000
+
+    programs/Xserver/hw/xfree86/input/keyboard/kbd.c
+    - set default XkbModel to pc105 (like legacy keyboard driver did)
+    - fix autorepeat (Bugzilla #1651, Petter Urkedal).
+
+commit b9bece29e9733bdf4bb44da6ced4d3e0e433f6e5
+Author: Kevin E Martin <kem@kem.org>
+Date:   Tue Aug 31 01:36:13 2004 +0000
+
+    Fix keyboard driver regression (Bug #1238, Kristian Hoegsberg).
+
+commit 3d97e8a41a8a15769f43233a2ed7692387cb0b81
+Author: Kevin E Martin <kem@kem.org>
+Date:   Sun Aug 29 21:06:00 2004 +0000
+
+    Fix make install when BuildServersOnly is YES (Bug #1213).
+    Fix build failures when UseDeprecatedKeyboardDriver is YES and
+        DoLoadableServer is NO (Bug #1229, Kristian Høgsberg).
+    Fix failure when using DLL loader and LD_BIND_NOW is set (Bug #1212, Adam
+        Jackson).
+
+commit 9e2172ffef436acb9a88147f276c9ddf12739a14
+Author: Kevin E Martin <kem@kem.org>
+Date:   Mon Aug 16 22:48:51 2004 +0000
+
+    Update release and date for first RC.
+    Fix kbd/keyboard driver for DoLoadableServer NO.
+    Revert change since it is better to set date in the config files.
+
+commit 58f47a9c32cf379fd473f01b18ddc57b90e47b0b
+Author: Kevin E Martin <kem@kem.org>
+Date:   Mon Aug 16 20:17:52 2004 +0000
+
+    Add kdb <-> keyboard aliasing when UseDeprecatedKeyboardDriver is NO (Bug
+        #1072, Kristian Høgsberg).
+
+commit 32d5ece27279bf7f1211346f15a292f73ff334d6
+Author: Egbert Eich <eich@suse.de>
+Date:   Fri Apr 23 19:54:03 2004 +0000
+
+    Merging XORG-CURRENT into trunk
+
+commit cbec87bb621bd6bb2fddf1fe9aa970a09acba8f7
+Author: Egbert Eich <eich@suse.de>
+Date:   Sun Mar 14 08:33:52 2004 +0000
+
+    Importing vendor version xf86-4_4_99_1 on Sun Mar 14 00:26:39 PST 2004
+
+commit f078d9ca112038d16eb9b28d331a900f0ab7bd62
+Author: Egbert Eich <eich@suse.de>
+Date:   Wed Mar 3 12:12:33 2004 +0000
+
+    Importing vendor version xf86-4_4_0 on Wed Mar 3 04:09:24 PST 2004
+
+commit e5e92f4396bc0a73ddda050403d422cee9bdfd2f
+Author: Egbert Eich <eich@suse.de>
+Date:   Thu Feb 26 13:36:00 2004 +0000
+
+    readding XFree86's cvs IDs
+
+commit 1056cd4925dc787f72b9f6b5900e55e00d7ba973
+Author: Egbert Eich <eich@suse.de>
+Date:   Thu Feb 26 09:23:34 2004 +0000
+
+    Importing vendor version xf86-4_3_99_903 on Wed Feb 26 01:21:00 PST 2004
+
+commit 1c8924b7c1728653ebe49a663dd6125cef010bc8
+Author: Kaleb Keithley <kaleb@freedesktop.org>
+Date:   Fri Dec 19 20:55:25 2003 +0000
+
+    XFree86 4.3.99.902 (RC 2)
+
+commit 01eff4e6297717400f8b9517a9e4ccdc067d07d3
+Author: Kaleb Keithley <kaleb@freedesktop.org>
+Date:   Tue Nov 25 19:28:48 2003 +0000
+
+    XFree86 4.3.99.16 Bring the tree up to date for the Cygwin folks
+
+commit 303235b2d4a53231a6aa74d4d74d683842477b27
+Author: Kaleb Keithley <kaleb@freedesktop.org>
+Date:   Fri Nov 14 16:48:56 2003 +0000
+
+    XFree86 4.3.0.1
+
+commit 724aeb56e7d6e5940ad6d329f53f5b80a9fc38ae
+Author: Kaleb Keithley <kaleb@freedesktop.org>
+Date:   Fri Nov 14 16:48:56 2003 +0000
+
+    Initial revision
