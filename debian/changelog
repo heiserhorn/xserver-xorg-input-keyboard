@@ -1,6 +1,8 @@
 xserver-xorg-input-keyboard (1:1.2.1-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Add a NEWS entry about the old "keyboard" driver not being shipped
+    anymore and "kbd" replacing it.
   * Pull some more changesets from upstream git:
     + fd51e4d27d7a31ed9d4a075c3814b36320af4612
     + caeb0f364c1a95a9ad3e64dd722c8ddc88077a86
