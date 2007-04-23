@@ -1,12 +1,17 @@
-xserver-xorg-input-keyboard (1:1.1.1-2) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.2.1-1) UNRELEASED; urgency=low
 
+  * New upstream release.
+  * Pull some more changesets from upstream git:
+    + fd51e4d27d7a31ed9d4a075c3814b36320af4612
+    + caeb0f364c1a95a9ad3e64dd722c8ddc88077a86
+    + 05dd89ef03cee6853e7c2db518b6b22785cc3e7c
   * Install the upstream changelog.
   * Bump Build-Depends: xserver-xorg-dev to >= 2:1.2.99.902
     (needed to let xsfbs get access to serverminver).
   * Add a link to www.X.org and a reference to the xf86-input-keyboard
     module in the long description.
 
- -- Brice Goglin <Brice.Goglin@ens-lyon.org>  Mon, 23 Apr 2007 22:45:40 +0200
+ -- Brice Goglin <Brice.Goglin@ens-lyon.org>  Mon, 23 Apr 2007 23:06:10 +0200
 
 xserver-xorg-input-keyboard (1:1.1.1-1) experimental; urgency=low
 

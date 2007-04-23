@@ -1,3 +1,60 @@
+commit 05dd89ef03cee6853e7c2db518b6b22785cc3e7c
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Mon Feb 5 14:29:54 2007 -0800
+
+    Fix key led update
+    
+    Cf: https://bugs.freedesktop.org/show_bug.cgi?id=313
+        https://bugs.freedesktop.org/attachment.cgi?id=8396&action=view
+    
+     ------- Comment  #8 From Samuel Thibault  2007-01-14 14:28:16  [reply] -------
+    
+    Created an attachment (id=8396) [details]
+    fix key led update
+    
+    Ok, found the problem: when XKB is used (!pKbd->noXkb), pKbd->keyLeds is not
+    updated, so that UpdateLeds(), even if it called at the right places, actually
+    just clears all LEDs.  Here is a patch.
+
+commit caeb0f364c1a95a9ad3e64dd722c8ddc88077a86
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Fri Dec 8 09:09:24 2006 +0200
+
+    don't release keys on newer servers
+    On newer servers, we take care of the key release over VT switch already,
+    so don't do it twice; that will lead to hilarious results.
+
+commit fd51e4d27d7a31ed9d4a075c3814b36320af4612
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Tue Nov 7 00:10:54 2006 +0200
+
+    add xf86Keymap.h, fix _SOURCES -> _SRCS in Makefile.am
+
+commit 976e12d85920d5bd09f6d0ba005835f733b296b7
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Sat Nov 4 21:01:55 2006 +0200
+
+    bump to 1.2.1
+
+commit 08aa290b0125eb681f872ef821ecffd5818caeb6
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Sat Nov 4 21:01:49 2006 +0200
+
+    add xf86OSKbd.h to build system, _SOURCES -> _SRCS
+    Add xf86OSKbd.h to the build system, and change _SOURCES use to _SRCS,
+    except when explicitly referring to a target.  This keeps automake 1.10
+    happy.
+
+commit 95e5d2521fc39a661e13b313e5aa2514ddac9a5e
+Author: Daniel Stone <daniel@fooishbar.org>
+Date:   Thu Nov 2 00:24:24 2006 +0200
+
+    move os keyboard layer into kbd driver, remove legacy keyboard driver
+    Completely remove the old 'keyboard' driver.
+    Move the OS keyboard layer from the Xorg DDX into the kbd driver.  Right
+    now, BSD, Linux, SCO, and Solaris, have been dragged over.
+    Bump to 1.2.0, as we'll collide badly with the existing OS keyboard layer.
+
 commit 3bfed2fc2e401bc4b5f74a3f20014d4a5c7dad30
 Author: Adam Jackson <ajax@benzedrine.nwnk.net>
 Date:   Fri Oct 13 18:26:38 2006 -0400
