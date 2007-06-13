@@ -1,5 +1,6 @@
-xserver-xorg-input-keyboard (1:1.2.1-1) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.2.0-1+1.2.1) UNRELEASED; urgency=low
 
+  [ Brice Goglin ]
   * New upstream release.
   * Add a NEWS entry about the old "keyboard" driver not being shipped
     anymore and "kbd" replacing it.
@@ -13,7 +14,11 @@ xserver-xorg-input-keyboard (1:1.2.1-1) UNRELEASED; urgency=low
   * Add a link to www.X.org and a reference to the xf86-input-keyboard
     module in the long description.
 
- -- Brice Goglin <Brice.Goglin@ens-lyon.org>  Mon, 23 Apr 2007 23:06:10 +0200
+  [ Drew Parsons ]
+  * 1.2.1 not released upstream yet, so use 1.2.0 as the version and
+    put 1.2.1 into the Debian subversion.
+
+ -- Drew Parsons <dparsons@debian.org>  Wed, 13 Jun 2007 22:11:32 +1000
 
 xserver-xorg-input-keyboard (1:1.1.1-1) experimental; urgency=low
 
