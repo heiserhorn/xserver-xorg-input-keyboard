@@ -1,4 +1,4 @@
-xserver-xorg-input-keyboard (1:1.2.1-1) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.2.1-1) unstable; urgency=low
 
   The old "keyboard" driver has been removed and is now superseded by the
   "kbd" driver. The corresponding "InputDevice" section in the xorg.conf

@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.2.0-1+1.2.2) UNRELEASED; urgency=low
+
+  * Set distribution to unstable in debian/NEWS (closes: #428845).
+
+ -- Julien Cristau <jcristau@debian.org>  Thu, 14 Jun 2007 18:44:38 +0200
+
 xserver-xorg-input-keyboard (1:1.2.0-1+1.2.1) unstable; urgency=low
 
   [ Brice Goglin ]
