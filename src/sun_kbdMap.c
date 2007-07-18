@@ -581,6 +581,35 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
     else
 #endif
         pKbd->scancodeMap = &sunTransMap;
+
+    /*
+     * Add Sun keyboard keysyms to default map
+     */
+#define map_for_key(k,c) 	map[(k * GLYPHS_PER_KEY) + c]   
+    map_for_key(KEY_Kanji,	0) = XK_Kanji;
+    map_for_key(KEY_Execute,	0) = XK_Execute;
+    map_for_key(KEY_Power,	0) = SunXK_PowerSwitch;
+    map_for_key(KEY_Power,	1) = SunXK_PowerSwitchShift;
+    map_for_key(KEY_Mute,	0) = SunXK_AudioMute;
+    map_for_key(KEY_Mute,	1) = SunXK_VideoDegauss;
+    map_for_key(KEY_AudioLower,	0) = SunXK_AudioLowerVolume;
+    map_for_key(KEY_AudioLower,	1) = SunXK_VideoLowerBrightness;
+    map_for_key(KEY_AudioRaise,	0) = SunXK_AudioRaiseVolume;
+    map_for_key(KEY_AudioRaise,	1) = SunXK_VideoRaiseBrightness;
+    map_for_key(KEY_Help,	0) = XK_Help;
+    map_for_key(KEY_L1,		0) = XK_L1;
+    map_for_key(KEY_L2,		0) = XK_L2;
+    map_for_key(KEY_L3,		0) = XK_L3;
+    map_for_key(KEY_L4,		0) = XK_L4;
+    map_for_key(KEY_L5,		0) = XK_L5;
+    map_for_key(KEY_L6,		0) = XK_L6;
+    map_for_key(KEY_L7,		0) = XK_L7;
+    map_for_key(KEY_L8,		0) = XK_L8;
+    map_for_key(KEY_L9,		0) = XK_L9;
+    map_for_key(KEY_L10,	0) = XK_L10;
+    map_for_key(KEY_F11,	0) = SunXK_F36;
+    map_for_key(KEY_F12,	0) = SunXK_F37;
+    map_for_key(KEY_Menu,	0) = XK_Multi_key;
     
     /*
      * compute the modifier map
@@ -634,33 +663,6 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 
 	}
     }
-
-    /* Add Sun keyboard keysyms to default map */
-#define map_for_key(k,c) 	map[(k * GLYPHS_PER_KEY) + c]   
-    map_for_key(KEY_Kanji,	0) = XK_Kanji;
-    map_for_key(KEY_Execute,	0) = XK_Execute;
-    map_for_key(KEY_Power,	0) = SunXK_PowerSwitch;
-    map_for_key(KEY_Power,	1) = SunXK_PowerSwitchShift;
-    map_for_key(KEY_Mute,	0) = SunXK_AudioMute;
-    map_for_key(KEY_Mute,	1) = SunXK_VideoDegauss;
-    map_for_key(KEY_AudioLower,	0) = SunXK_AudioLowerVolume;
-    map_for_key(KEY_AudioLower,	1) = SunXK_VideoLowerBrightness;
-    map_for_key(KEY_AudioRaise,	0) = SunXK_AudioRaiseVolume;
-    map_for_key(KEY_AudioRaise,	1) = SunXK_VideoRaiseBrightness;
-    map_for_key(KEY_Help,	0) = XK_Help;
-    map_for_key(KEY_L1,		0) = XK_L1;
-    map_for_key(KEY_L2,		0) = XK_L2;
-    map_for_key(KEY_L3,		0) = XK_L3;
-    map_for_key(KEY_L4,		0) = XK_L4;
-    map_for_key(KEY_L5,		0) = XK_L5;
-    map_for_key(KEY_L6,		0) = XK_L6;
-    map_for_key(KEY_L7,		0) = XK_L7;
-    map_for_key(KEY_L8,		0) = XK_L8;
-    map_for_key(KEY_L9,		0) = XK_L9;
-    map_for_key(KEY_L10,	0) = XK_L10;
-    map_for_key(KEY_F11,	0) = SunXK_F36;
-    map_for_key(KEY_F12,	0) = SunXK_F37;
-    map_for_key(KEY_Menu,	0) = XK_Multi_key;
 	
     pKeySyms->map        = map;
     pKeySyms->mapWidth   = GLYPHS_PER_KEY;
