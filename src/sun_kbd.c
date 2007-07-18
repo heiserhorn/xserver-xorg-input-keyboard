@@ -161,7 +161,6 @@ sunKbdInit(sunKbdPrivPtr priv, int kbdFD, const char *devName, pointer options)
     xf86Msg(X_PROBED, "%s: Keyboard layout: %d\n", devName, klayout);
 
     priv->ktype 	= ktype;
-    priv->keyMap	= sunGetKbdMapping(ktype);
     priv->oleds 	= sunKbdGetLeds(priv);
 
     return Success;
@@ -401,13 +400,6 @@ SetKbdRepeat(InputInfoPtr pInfo, char rad)
 }
 
 static void
-KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
-{
-    /* Should probably do something better here */
-    xf86KbdGetMapping(pKeySyms, pModMap);
-}
-
-static void
 ReadInput(InputInfoPtr pInfo)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
@@ -420,7 +412,7 @@ ReadInput(InputInfoPtr pInfo)
     if ((nBytes = read(pInfo->fd, (char *)event, sizeof(event))) > 0)
     {
         for (i = 0; i < (nBytes / sizeof(Firm_event)); i++) {
-	    pKbd->PostEvent(pInfo, priv->keyMap[event[i].id],
+	    pKbd->PostEvent(pInfo, event[i].id & 0xFF,
 			    event[i].value == VKEY_DOWN ? TRUE : FALSE);
 	}
     }

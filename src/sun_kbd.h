@@ -43,7 +43,6 @@ typedef struct {
     int 		odirect;	/* Original "direct" mode setting */
     unsigned char	oleds;		/* Original LED state */
     const char *	strmod;		/* Streams module pushed on kbd device */
-    const unsigned char *keyMap;
 } sunKbdPrivRec, *sunKbdPrivPtr;
 
 /* sun_kbd.c */
@@ -60,10 +59,6 @@ extern void sunKbdSetLeds 	(sunKbdPrivPtr priv, int leds);
 extern int  sunKbdGetLeds 	(sunKbdPrivPtr priv);
 extern void sunKbdSetRepeat 	(sunKbdPrivPtr priv, char rad);
 
-/* sun_kbdEv.c */
-#include <sys/vuid_event.h>
-extern void sunPostKbdEvent	(int ktype, Firm_event *event);
-
-extern const unsigned char *sunGetKbdMapping(int ktype);
-
+/* sun_kbdMap.c */
+extern void KbdGetMapping 	(InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap);
 #endif
