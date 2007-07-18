@@ -22,7 +22,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-/* Copyright 2004-2005 Sun Microsystems, Inc.  All rights reserved.
+/* Copyright 2004-2007 Sun Microsystems, Inc.  All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -60,41 +60,34 @@
 #include "xf86OSKbd.h"
 #include "sun_kbd.h"
 
-/***************************************************************************
- * Common implementation of routines shared by "keyboard" driver in sun_io.c
- * and "kbd" driver (later on in this file)
- */
-
 #include <sys/stropts.h>
 #include <sys/vuid_event.h>
 #include <sys/kbd.h>
 
-_X_HIDDEN int
-sunKbdOpen(const char *devName, pointer options)
+static void
+sunKbdSetLeds(InputInfoPtr pInfo, int leds)
 {
-    int kbdFD;
-    const char *kbdPath = NULL;
-    const char *defaultKbd = "/dev/kbd";
+    int i;
 
-    if (options != NULL) {
-	kbdPath = xf86SetStrOption(options, "Device", NULL);
+    SYSCALL(i = ioctl(pInfo->fd, KIOCSLED, &leds));
+    if (i < 0) {
+	xf86Msg(X_ERROR, "%s: Failed to set keyboard LED's: %s\n",
+                pInfo->name, strerror(errno));
     }
-    if (kbdPath == NULL) {
-        kbdPath = defaultKbd;
-    }
+}
 
-    kbdFD = open(kbdPath, O_RDONLY | O_NONBLOCK);
-    
-    if (kbdFD == -1) {
-        xf86Msg(X_ERROR, "%s: cannot open \"%s\"\n", devName, kbdPath);
-    } else {
-	xf86MsgVerb(X_INFO, 3, "%s: Opened device \"%s\"\n", devName, kbdPath);
+
+static int
+sunKbdGetLeds(InputInfoPtr pInfo)
+{
+    int i, leds = 0;
+
+    SYSCALL(i = ioctl(pInfo->fd, KIOCGLED, &leds));
+    if (i < 0) {
+        xf86Msg(X_ERROR, "%s: Failed to get keyboard LED's: %s\n",
+                pInfo->name, strerror(errno));
     }
-    
-    if ((kbdPath != NULL) && (kbdPath != defaultKbd)) {
-	xfree(kbdPath);
-    }
-    return kbdFD;
+    return leds;
 }
 
 
@@ -102,15 +95,16 @@ sunKbdOpen(const char *devName, pointer options)
  * Save initial keyboard state.  This is called at the start of each server
  * generation.
  */
-
-_X_HIDDEN int
-sunKbdInit(sunKbdPrivPtr priv, int kbdFD, const char *devName, pointer options)
+static int
+KbdInit(InputInfoPtr pInfo, int what)
 {
+    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
+    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
+    pointer options = pInfo->options;
+    
     int	ktype, klayout, i;
     const char *ktype_name;
 
-    priv->kbdFD 	= kbdFD;
-    priv->devName 	= devName;
     priv->otranslation 	= -1;
     priv->odirect 	= -1;
 
@@ -121,25 +115,25 @@ sunKbdInit(sunKbdPrivPtr priv, int kbdFD, const char *devName, pointer options)
     }
 
     if (priv->strmod) {
-	SYSCALL(i = ioctl(priv->kbdFD, I_PUSH, priv->strmod));
+	SYSCALL(i = ioctl(pInfo->fd, I_PUSH, priv->strmod));
 	if (i < 0) {
 	    xf86Msg(X_ERROR,
 		    "%s: cannot push module '%s' onto keyboard device: %s\n",
-		    priv->devName, priv->strmod, strerror(errno));
+		    pInfo->name, priv->strmod, strerror(errno));
 	}
     }
     
-    SYSCALL(i = ioctl(kbdFD, KIOCTYPE, &ktype));
+    SYSCALL(i = ioctl(pInfo->fd, KIOCTYPE, &ktype));
     if (i < 0) {
 	xf86Msg(X_ERROR, "%s: Unable to determine keyboard type: %s\n", 
-		devName, strerror(errno));
+		pInfo->name, strerror(errno));
 	return BadImplementation;
     }
     
-    SYSCALL(i = ioctl(kbdFD, KIOCLAYOUT, &klayout));
+    SYSCALL(i = ioctl(pInfo->fd, KIOCLAYOUT, &klayout));
     if (i < 0) {	
 	xf86Msg(X_ERROR, "%s: Unable to determine keyboard layout: %s\n", 
-		devName, strerror(errno));
+		pInfo->name, strerror(errno));
 	return BadImplementation;
     }
     
@@ -157,175 +151,13 @@ sunKbdInit(sunKbdPrivPtr priv, int kbdFD, const char *devName, pointer options)
     }
 
     xf86Msg(X_PROBED, "%s: Keyboard type: %s (%d)\n",
-	    devName, ktype_name, ktype);
-    xf86Msg(X_PROBED, "%s: Keyboard layout: %d\n", devName, klayout);
+	    pInfo->name, ktype_name, ktype);
+    xf86Msg(X_PROBED, "%s: Keyboard layout: %d\n", pInfo->name, klayout);
 
     priv->ktype 	= ktype;
-    priv->oleds 	= sunKbdGetLeds(priv);
+    priv->oleds 	= sunKbdGetLeds(pInfo);
 
     return Success;
-}
-
-_X_HIDDEN int
-sunKbdOn(sunKbdPrivPtr priv)
-{
-    int	ktrans, kdirect, i;
-
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCGDIRECT, &kdirect));
-    if (i < 0) {
-	xf86Msg(X_ERROR, 
-		"%s: Unable to determine keyboard direct setting: %s\n", 
-		priv->devName, strerror(errno));
-	return BadImplementation;
-    }
-
-    priv->odirect = kdirect;
-    kdirect = 1;
-
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCSDIRECT, &kdirect));
-    if (i < 0) {
-	xf86Msg(X_ERROR, "%s: Failed turning keyboard direct mode on: %s\n",
-			priv->devName, strerror(errno));
-	return BadImplementation;
-    }
-
-    /* Setup translation */
-
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCGTRANS, &ktrans));
-    if (i < 0) {
-	xf86Msg(X_ERROR, 
-		"%s: Unable to determine keyboard translation mode: %s\n", 
-		priv->devName, strerror(errno));
-	return BadImplementation;
-    }
-
-    priv->otranslation = ktrans;
-    ktrans = TR_UNTRANS_EVENT;
-
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCTRANS, &ktrans));
-    if (i < 0) {	
-	xf86Msg(X_ERROR, "%s: Failed setting keyboard translation mode: %s\n",
-			priv->devName, strerror(errno));
-	return BadImplementation;
-    }
-
-    return Success;
-}
-
-_X_HIDDEN int
-sunKbdOff(sunKbdPrivPtr priv)
-{
-    int i;
-
-    /* restore original state */
-    
-    sunKbdSetLeds(priv, priv->oleds);
-    
-    if (priv->otranslation != -1) {
-        SYSCALL(i = ioctl(priv->kbdFD, KIOCTRANS, &priv->otranslation));
-	if (i < 0) {
-	    xf86Msg(X_ERROR,
-		    "%s: Unable to restore keyboard translation mode: %s\n",
-		    priv->devName, strerror(errno));
-	    return BadImplementation;
-	}
-	priv->otranslation = -1;
-    }
-
-    if (priv->odirect != -1) {
-        SYSCALL(i = ioctl(priv->kbdFD, KIOCSDIRECT, &priv->odirect));
-	if (i < 0) {
-	    xf86Msg(X_ERROR,
-		    "%s: Unable to restore keyboard direct setting: %s\n",
-		    priv->devName, strerror(errno));
-	    return BadImplementation;
-	}
-	priv->odirect = -1;
-    }
-
-    if (priv->strmod) {
-	SYSCALL(i = ioctl(priv->kbdFD, I_POP, priv->strmod));
-	if (i < 0) {
-            xf86Msg(X_WARNING,
-		    "%s: cannot pop module '%s' off keyboard device: %s\n",
-		    priv->devName, priv->strmod, strerror(errno));
-	}
-    }
-
-    return Success;
-}
-
-_X_HIDDEN void
-sunKbdSoundBell(sunKbdPrivPtr priv, int loudness, int pitch, int duration)
-{
-    int	kbdCmd, i;
-
-    if (loudness && pitch)
-    {
- 	kbdCmd = KBD_CMD_BELL;
-		
-	SYSCALL(i = ioctl (priv->kbdFD, KIOCCMD, &kbdCmd));
-	if (i < 0) {
-	    xf86Msg(X_ERROR, "%s: Failed to activate bell: %s\n",
-                priv->devName, strerror(errno));
-	}
-	
-	usleep(duration * loudness * 20);
-	
-	kbdCmd = KBD_CMD_NOBELL;
-	SYSCALL(i = ioctl (priv->kbdFD, KIOCCMD, &kbdCmd));
-	if (i < 0) {
-	     xf86Msg(X_ERROR, "%s: Failed to deactivate bell: %s\n",
-                priv->devName, strerror(errno));
-	}
-    }
-}
-
-_X_HIDDEN void
-sunKbdSetLeds(sunKbdPrivPtr priv, int leds)
-{
-    int i;
-	
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCSLED, &leds));
-    if (i < 0) {
-	xf86Msg(X_ERROR, "%s: Failed to set keyboard LED's: %s\n",
-                priv->devName, strerror(errno));
-    }
-}
-
-_X_HIDDEN int
-sunKbdGetLeds(sunKbdPrivPtr priv)
-{
-    int i, leds = 0;
-
-    SYSCALL(i = ioctl(priv->kbdFD, KIOCGLED, &leds));
-    if (i < 0) {
-        xf86Msg(X_ERROR, "%s: Failed to get keyboard LED's: %s\n",
-                priv->devName, strerror(errno));
-    }
-    return leds;
-}
-
-/* ARGSUSED0 */
-_X_HIDDEN void
-sunKbdSetRepeat(sunKbdPrivPtr priv, char rad)
-{
-    /* Nothing to do */
-}
-
-/***************************************************************************
- * Routines called from "kbd" driver via proc vectors filled in by
- * xf86OSKbdPreInit().
- */
-
-
-static int
-KbdInit(InputInfoPtr pInfo, int what)
-{
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-
-    return sunKbdInit(priv, pInfo->fd, pInfo->name, pInfo->options);
 }
 
 
@@ -335,7 +167,47 @@ KbdOn(InputInfoPtr pInfo, int what)
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
-    return sunKbdOn(priv);
+    int	ktrans, kdirect, i;
+
+    SYSCALL(i = ioctl(pInfo->fd, KIOCGDIRECT, &kdirect));
+    if (i < 0) {
+	xf86Msg(X_ERROR, 
+		"%s: Unable to determine keyboard direct setting: %s\n", 
+		pInfo->name, strerror(errno));
+	return BadImplementation;
+    }
+
+    priv->odirect = kdirect;
+    kdirect = 1;
+
+    SYSCALL(i = ioctl(pInfo->fd, KIOCSDIRECT, &kdirect));
+    if (i < 0) {
+	xf86Msg(X_ERROR, "%s: Failed turning keyboard direct mode on: %s\n",
+			pInfo->name, strerror(errno));
+	return BadImplementation;
+    }
+
+    /* Setup translation */
+
+    SYSCALL(i = ioctl(pInfo->fd, KIOCGTRANS, &ktrans));
+    if (i < 0) {
+	xf86Msg(X_ERROR, 
+		"%s: Unable to determine keyboard translation mode: %s\n", 
+		pInfo->name, strerror(errno));
+	return BadImplementation;
+    }
+
+    priv->otranslation = ktrans;
+    ktrans = TR_UNTRANS_EVENT;
+
+    SYSCALL(i = ioctl(pInfo->fd, KIOCTRANS, &ktrans));
+    if (i < 0) {	
+	xf86Msg(X_ERROR, "%s: Failed setting keyboard translation mode: %s\n",
+			pInfo->name, strerror(errno));
+	return BadImplementation;
+    }
+
+    return Success;
 }
 
 static int
@@ -344,7 +216,44 @@ KbdOff(InputInfoPtr pInfo, int what)
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
-    return sunKbdOff(priv);
+    int i;
+
+    /* restore original state */
+    
+    sunKbdSetLeds(pInfo, priv->oleds);
+    
+    if (priv->otranslation != -1) {
+        SYSCALL(i = ioctl(pInfo->fd, KIOCTRANS, &priv->otranslation));
+	if (i < 0) {
+	    xf86Msg(X_ERROR,
+		    "%s: Unable to restore keyboard translation mode: %s\n",
+		    pInfo->name, strerror(errno));
+	    return BadImplementation;
+	}
+	priv->otranslation = -1;
+    }
+
+    if (priv->odirect != -1) {
+        SYSCALL(i = ioctl(pInfo->fd, KIOCSDIRECT, &priv->odirect));
+	if (i < 0) {
+	    xf86Msg(X_ERROR,
+		    "%s: Unable to restore keyboard direct setting: %s\n",
+		    pInfo->name, strerror(errno));
+	    return BadImplementation;
+	}
+	priv->odirect = -1;
+    }
+
+    if (priv->strmod) {
+	SYSCALL(i = ioctl(pInfo->fd, I_POP, priv->strmod));
+	if (i < 0) {
+            xf86Msg(X_WARNING,
+		    "%s: cannot pop module '%s' off keyboard device: %s\n",
+		    pInfo->name, priv->strmod, strerror(errno));
+	}
+    }
+
+    return Success;
 }
 
 
@@ -354,7 +263,27 @@ SoundKbdBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
-    sunKbdSoundBell(priv, loudness, pitch, duration);
+    int	kbdCmd, i;
+
+    if (loudness && pitch)
+    {
+ 	kbdCmd = KBD_CMD_BELL;
+		
+	SYSCALL(i = ioctl (pInfo->fd, KIOCCMD, &kbdCmd));
+	if (i < 0) {
+	    xf86Msg(X_ERROR, "%s: Failed to activate bell: %s\n",
+                pInfo->name, strerror(errno));
+	}
+	
+	usleep(duration * loudness * 20);
+	
+	kbdCmd = KBD_CMD_NOBELL;
+	SYSCALL(i = ioctl (pInfo->fd, KIOCCMD, &kbdCmd));
+	if (i < 0) {
+	     xf86Msg(X_ERROR, "%s: Failed to deactivate bell: %s\n",
+                pInfo->name, strerror(errno));
+	}
+    }
 }
 
 static void
@@ -362,7 +291,7 @@ SetKbdLeds(InputInfoPtr pInfo, int leds)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-    int real_leds = sunKbdGetLeds(priv);
+    int real_leds = sunKbdGetLeds(pInfo);
 
     real_leds &= ~(LED_CAPS_LOCK | LED_NUM_LOCK | LED_SCROLL_LOCK | LED_COMPOSE);
 
@@ -371,7 +300,7 @@ SetKbdLeds(InputInfoPtr pInfo, int leds)
     if (leds & XLED3)  real_leds |= LED_SCROLL_LOCK;
     if (leds & XLED4)  real_leds |= LED_COMPOSE;
     
-    sunKbdSetLeds(priv, real_leds);
+    sunKbdSetLeds(pInfo, real_leds);
 }
 
 static int
@@ -380,7 +309,7 @@ GetKbdLeds(InputInfoPtr pInfo)
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
     int leds = 0;
-    int real_leds = sunKbdGetLeds(priv);
+    int real_leds = sunKbdGetLeds(pInfo);
 
     if (real_leds & LED_CAPS_LOCK)	leds |= XLED1;
     if (real_leds & LED_NUM_LOCK)	leds |= XLED2;
@@ -390,13 +319,11 @@ GetKbdLeds(InputInfoPtr pInfo)
     return leds;
 }
 
+/* ARGSUSED0 */
 static void
 SetKbdRepeat(InputInfoPtr pInfo, char rad)
 {
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-    
-    sunKbdSetRepeat(priv, rad);
+    /* Nothing to do */
 }
 
 static void
@@ -421,13 +348,34 @@ ReadInput(InputInfoPtr pInfo)
 static Bool
 OpenKeyboard(InputInfoPtr pInfo)
 {
-    pInfo->fd = sunKbdOpen(pInfo->name, pInfo->options);
+    const char *kbdPath = NULL;
+    const char *defaultKbd = "/dev/kbd";
 
-    if (pInfo->fd >= 0) {
+    if (pInfo->options != NULL) {
+	kbdPath = xf86SetStrOption(pInfo->options, "Device", NULL);
+    }
+    if (kbdPath == NULL) {
+        kbdPath = defaultKbd;
+    }
+
+    pInfo->fd = open(kbdPath, O_RDONLY | O_NONBLOCK);
+    
+    if (pInfo->fd == -1) {
+        xf86Msg(X_ERROR, "%s: cannot open \"%s\"\n", pInfo->name, kbdPath);
+    } else {
+	xf86MsgVerb(X_INFO, 3, "%s: Opened device \"%s\"\n", pInfo->name,
+		    kbdPath);
+    }
+    
+    if ((kbdPath != NULL) && (kbdPath != defaultKbd)) {
+	xfree(kbdPath);
+    }
+
+    if (pInfo->fd == -1) {
+	return FALSE;
+    } else {
 	pInfo->read_input = ReadInput;
 	return TRUE;
-    } else {
-	return FALSE;
     }
 }
 
