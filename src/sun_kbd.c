@@ -326,8 +326,6 @@ SoundKbdBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
 static void
 SetKbdLeds(InputInfoPtr pInfo, int leds)
 {
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
     int real_leds = sunKbdGetLeds(pInfo);
 
     real_leds &= ~(LED_CAPS_LOCK | LED_NUM_LOCK | LED_SCROLL_LOCK | LED_COMPOSE);
@@ -343,8 +341,6 @@ SetKbdLeds(InputInfoPtr pInfo, int leds)
 static int
 GetKbdLeds(InputInfoPtr pInfo)
 {
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
     int leds = 0;
     int real_leds = sunKbdGetLeds(pInfo);
 
@@ -367,7 +363,6 @@ static void
 ReadInput(InputInfoPtr pInfo)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
     Firm_event event[64];
     int        nBytes, i;
 
