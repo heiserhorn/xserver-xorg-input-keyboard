@@ -6,6 +6,10 @@
  * Based on the code from lnx_io.c which is
  * Copyright 1992 by Orest Zborowski <obz@Kodak.com>
  * Copyright 1993 by David Dawes <dawes@xfree86.org>
+ *
+ * Portions based on kbdrate.c from util-linux 2.9t, which is
+ * Copyright 1992 Rickard E. Faith.  Distributed under the GPL.
+ * This program comes with ABSOLUTELY NO WARRANTY.
  */
 
 #define NEED_EVENTS
