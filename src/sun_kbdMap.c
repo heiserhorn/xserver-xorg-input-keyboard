@@ -21,64 +21,26 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-/* [JCH-96/01/21] Extended std reverse map to four buttons. */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "xf86.h"
-#include "xf86Priv.h"
-#include "xf86_OSlib.h"
+#include <X11/Xfuncproto.h>
+#include <X11/Sunkeysym.h>
+#include "atKeynames.h"
 #include "xf86OSKbd.h"
+#include "xf86Keymap.h"
 #include "sun_kbd.h"
 
-#ifdef XINPUT
-#include <X11/extensions/XI.h>
-#include <X11/extensions/XIproto.h>
-#include "xf86Xinput.h"
-#endif
-
-#include "inputstr.h"
-
 #include <sys/kbd.h>
-#include "atKeynames.h"
-
-#ifdef XKB
-extern Bool noXkbExtension;
-#endif
-
-#define XE_POINTER  1
-#define XE_KEYBOARD 2
-
-#ifdef XINPUT
-#define ENQUEUE(ev, code, direction, dev_type) \
-  (ev)->u.u.detail = (code); \
-  (ev)->u.u.type   = (direction); \
-  xf86eqEnqueue((ev))
-#else
-#define ENQUEUE(ev, code, direction, dev_type) \
-  (ev)->u.u.detail = (code); \
-  (ev)->u.u.type   = (direction); \
-  mieqEnqueue((ev))
-#endif
-
-static void startautorepeat(long keycode);
-static CARD32 processautorepeat(OsTimerPtr timer, CARD32 now, pointer arg);
-
-static OsTimerPtr sunTimer = NULL;
 
 /* Map the Solaris keycodes to the "XFree86" keycodes. */
-/*
- * This doesn't seem right.  It probably needs to be dependent on a keyboard
- * type.
- */
 
 /* Additional Sun Japanese Keyboard Keys not defined in common/atKeynames.h */
 #define KEY_Kanji	0x82
 #define KEY_Execute	0x83
 
-static unsigned char map[256] = {
+static unsigned char sunmap[256] = {
 #if defined(i386) || defined(__i386) || defined(__i386__) || defined(__x86)
 	KEY_NOTUSED,		/*   0 */
 	KEY_Tilde,		/*   1 */
@@ -348,6 +310,13 @@ static unsigned char map[256] = {
 	/* The rest default to KEY_UNKNOWN */
 };
 
+static
+TransMapRec sunTransMap = {
+    0,
+    (sizeof(sunmap)/sizeof(unsigned char)),
+    sunmap
+};
+
 #if defined(KB_USB)
 static unsigned char usbmap[256] = {
 /*
@@ -589,267 +558,114 @@ static unsigned char usbmap[256] = {
 	/* 231 */ KEY_RMeta,	/* Right Meta */
 };
 
+static
+TransMapRec usbTransMap = {
+    0,
+    (sizeof(usbmap)/sizeof(unsigned char)),
+    usbmap
+};
 #endif /* KB_USB */
 
-_X_HIDDEN const unsigned char *
-sunGetKbdMapping(int ktype) {
-#if defined(KB_USB)
-    if (ktype == KB_USB)
-        return usbmap;
-    else
-#endif
-        return map;
-}
-
-
-/*
- * sunPostKbdEvent --
- *	Translate the raw hardware Firm_event into an XEvent, and tell DIX
- *	about it. KeyCode preprocessing and so on is done ...
- *
- * Most of the Solaris stuff has whacked Panix/PC98 support in the
- * interests of simplicity - DWH 8/30/99
- */
-
 _X_HIDDEN void
-sunPostKbdEvent(int sun_ktype, Firm_event *event)
+KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 {
-    Bool        down;
-    KeyClassRec *keyc = ((DeviceIntPtr)xf86Info.pKeyboard)->key;
-    Bool        updateLeds = FALSE;
-    xEvent      kevent;
-    KeySym      *keysym;
-    int         keycode;
-    static int  lockkeys = 0;
-
-    /* Give down a value */
-    if (event->value == VKEY_DOWN)
-	down = TRUE;
-    else
-	down = FALSE;
-
-
-#if defined(KB_USB)
-    if(sun_ktype == KB_USB)
-	keycode = usbmap[event->id];
-    else
-#endif
-	keycode = map[event->id];
-
-    /*
-     * and now get some special keysequences
-     */
+    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
+    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
+    const unsigned char *keymap;
+    int i;
+    KeySym        *k;
     
-#ifdef XKB
-    if (((xf86Info.ddxSpecialKeys == SKWhenNeeded) &&
-	 (!xf86Info.ActionKeyBindingsSet)) ||
-	noXkbExtension || (xf86Info.ddxSpecialKeys == SKAlways))
+#if defined(KB_USB)
+    if (priv->ktype == KB_USB)
+	pKbd->scancodeMap = &usbTransMap;
+    else
 #endif
+        pKbd->scancodeMap = &sunTransMap;
+
+    /*
+     * Add Sun keyboard keysyms to default map
+     */
+#define map_for_key(k,c) 	map[(k * GLYPHS_PER_KEY) + c]   
+    map_for_key(KEY_Kanji,	0) = XK_Kanji;
+    map_for_key(KEY_Execute,	0) = XK_Execute;
+    map_for_key(KEY_Power,	0) = SunXK_PowerSwitch;
+    map_for_key(KEY_Power,	1) = SunXK_PowerSwitchShift;
+    map_for_key(KEY_Mute,	0) = SunXK_AudioMute;
+    map_for_key(KEY_Mute,	1) = SunXK_VideoDegauss;
+    map_for_key(KEY_AudioLower,	0) = SunXK_AudioLowerVolume;
+    map_for_key(KEY_AudioLower,	1) = SunXK_VideoLowerBrightness;
+    map_for_key(KEY_AudioRaise,	0) = SunXK_AudioRaiseVolume;
+    map_for_key(KEY_AudioRaise,	1) = SunXK_VideoRaiseBrightness;
+    map_for_key(KEY_Help,	0) = XK_Help;
+    map_for_key(KEY_L1,		0) = XK_L1;
+    map_for_key(KEY_L2,		0) = XK_L2;
+    map_for_key(KEY_L3,		0) = XK_L3;
+    map_for_key(KEY_L4,		0) = XK_L4;
+    map_for_key(KEY_L5,		0) = XK_L5;
+    map_for_key(KEY_L6,		0) = XK_L6;
+    map_for_key(KEY_L7,		0) = XK_L7;
+    map_for_key(KEY_L8,		0) = XK_L8;
+    map_for_key(KEY_L9,		0) = XK_L9;
+    map_for_key(KEY_L10,	0) = XK_L10;
+    map_for_key(KEY_F11,	0) = SunXK_F36;
+    map_for_key(KEY_F12,	0) = SunXK_F37;
+    map_for_key(KEY_Menu,	0) = XK_Multi_key;
+    
+    /*
+     * compute the modifier map
+     */
+    for (i = 0; i < MAP_LENGTH; i++)
+	pModMap[i] = NoSymbol;  /* make sure it is restored */
+  
+    for (k = map, i = MIN_KEYCODE;
+	 i < (NUM_KEYCODES + MIN_KEYCODE);
+	 i++, k += 4)
     {
-	if (!(ModifierDown(ShiftMask)) &&
-	    ((ModifierDown(ControlMask | AltMask)) ||
-	     (ModifierDown(ControlMask | AltLangMask))))
-	{
-	    switch (keycode) {
-	    /*
-	     * The idea here is to pass the scancode down to a list of 
-	     * registered routines.  There should be some standard conventions
-	     * for processing certain keys.
-	     */
-	    case KEY_BackSpace:
-		xf86ProcessActionEvent(ACTION_TERMINATE, NULL);
-		break;
-		
-	    /*
-	     * Check grabs
-	     */
-	    case KEY_KP_Divide:
-		xf86ProcessActionEvent(ACTION_DISABLEGRAB, NULL);
-		break;
-	    case KEY_KP_Multiply:
-		xf86ProcessActionEvent(ACTION_CLOSECLIENT, NULL);
-		break;
-		
-	    /*
-	     * Video mode switches
-	     */
-	    case KEY_KP_Minus:   /* Keypad - */
-		if (down) xf86ProcessActionEvent(ACTION_PREV_MODE, NULL);
-		if (!xf86Info.dontZoom) return;
-		break;
-		
-	    case KEY_KP_Plus:   /* Keypad + */
-		if (down) xf86ProcessActionEvent(ACTION_NEXT_MODE, NULL);
-		if (!xf86Info.dontZoom) return;
-		break;
-	    }
+	switch(*k) {
+      
+	case XK_Shift_L:
+	case XK_Shift_R:
+	    pModMap[i] = ShiftMask;
+	    break;
+      
+	case XK_Control_L:
+	case XK_Control_R:
+	    pModMap[i] = ControlMask;
+	    break;
+      
+	case XK_Caps_Lock:
+	    pModMap[i] = LockMask;
+	    break;
+      
+	case XK_Alt_L:
+	case XK_Alt_R:
+	    pModMap[i] = AltMask;
+	    break;
+      
+	case XK_Num_Lock:
+	    pModMap[i] = NumLockMask;
+	    break;
+
+	case XK_Scroll_Lock:
+	    pModMap[i] = ScrollLockMask;
+	    break;
+
+	    /* kana support */
+	case XK_Kana_Lock:
+	case XK_Kana_Shift:
+	    pModMap[i] = KanaMask;
+	    break;
+
+	    /* alternate toggle for multinational support */
+	case XK_Mode_switch:
+	    pModMap[i] = AltLangMask;
+	    break;
+
 	}
     }
-
-    /*
-     * Now map the scancodes to real X-keycodes ...
-     */
-    if (keycode == KEY_NOTUSED) {
-	xf86MsgVerb(X_INFO, 0,
-	    "raw code %d mapped to KEY_NOTUSED -- please report\n", event->id);
-	return;
-    }
-    if (keycode == KEY_UNKNOWN) {
-	xf86MsgVerb(X_INFO, 0,
-	    "raw code %d mapped to KEY_UNKNOWN -- please report\n", event->id);
-	return;
-    }
-    keycode += MIN_KEYCODE;
-    keysym = keyc->curKeySyms.map +
-	     (keyc->curKeySyms.mapWidth *
-	      (keycode - keyc->curKeySyms.minKeyCode));
-
-#ifdef XKB
-    if (noXkbExtension)
-#endif
-    {
-	/*
-	 * Toggle lock keys.
-	 */
-#define CAPSFLAG 0x01
-#define NUMFLAG 0x02
-#define SCROLLFLAG 0x04
-#define MODEFLAG 0x08
-
-	if (down) {
-	    /*
-	     * Handle the KeyPresses of the lock keys.
-	     */
-
-	    switch (keysym[0]) {
-
-	    case XK_Caps_Lock:
-		if (lockkeys & CAPSFLAG) {
-		    lockkeys &= ~CAPSFLAG;
-		    return;
-		}
-		lockkeys |= CAPSFLAG;
-		updateLeds = TRUE;
-		xf86Info.capsLock = down;
-		break;
-
-	    case XK_Num_Lock:
-		if (lockkeys & NUMFLAG) {
-		    lockkeys &= ~NUMFLAG;
-		    return;
-		}
-		lockkeys |= NUMFLAG;
-		updateLeds = TRUE;
-		xf86Info.numLock = down;
-		break;
-
-	    case XK_Scroll_Lock:
-		if (lockkeys & SCROLLFLAG) {
-		    lockkeys &= ~SCROLLFLAG;
-		    return;
-		}
-		lockkeys |= SCROLLFLAG;
-		updateLeds = TRUE;
-		xf86Info.scrollLock = down;
-		break;
-	    }
-	} else {
-	    /*
-	     * Handle the releases of the lock keys.
-	     */
-
-	    switch (keysym[0]) {
-
-	    case XK_Caps_Lock:
-		if (lockkeys & CAPSFLAG)
-		    return;
-		updateLeds = TRUE;
-		xf86Info.capsLock = down;
-		break;
-
-	    case XK_Num_Lock:
-		if (lockkeys & NUMFLAG)
-		    return;
-		updateLeds = TRUE;
-		xf86Info.numLock = down;
-		break;
-
-	    case XK_Scroll_Lock:
-		if (lockkeys & SCROLLFLAG)
-		    return;
-		updateLeds = TRUE;
-		xf86Info.scrollLock = down;
-		break;
-	    }
-	}
-
-  	if (updateLeds)
-	    xf86KbdLeds();
-
-	/*
-	 * If this keycode is not a modifier key, and its down initiate the
-	 * autorepeate sequence.  (Only necessary if not using XKB).
-	 *
-	 * If its not down, then reset the timer.
-	 */
-	if (!keyc->modifierMap[keycode]) {
-	    if (down) {
-		startautorepeat(keycode);
-	    } else {
-		TimerFree(sunTimer);
-		sunTimer = NULL;
-	    }
-  	}
-    }
-
-    xf86Info.lastEventTime =
-	kevent.u.keyButtonPointer.time =
-	    GetTimeInMillis();
-
-    /*
-     * And now send these prefixes ...
-     * NOTE: There cannot be multiple Mode_Switch keys !!!!
-     */
-
-    ENQUEUE(&kevent, keycode, (down ? KeyPress : KeyRelease), XE_KEYBOARD);
-}
-
-
-
-/*
- * Autorepeat stuff
- */
-
-void
-startautorepeat(long keycode)
-{
-    sunTimer = TimerSet(sunTimer, 		/* Timer */
-			0, 			/* Flags */
-			xf86Info.kbdDelay,	/* millis */
-			processautorepeat,	/* callback */
-			(pointer) keycode);	/* arg for timer */
-}
-
-CARD32
-processautorepeat(OsTimerPtr timer, CARD32 now, pointer arg)
-{
-    xEvent kevent;
-    int    keycode;
-
-    keycode = (long)arg;
-
-    xf86Info.lastEventTime =
-	kevent.u.keyButtonPointer.time =
-	    GetTimeInMillis();
-
-    /*
-     * Repeat a key by faking a KeyRelease, and a KeyPress event in rapid
-     * succession
-     */
-
-    ENQUEUE(&kevent, keycode,  KeyRelease, XE_KEYBOARD);
-    ENQUEUE(&kevent, keycode,  KeyPress, XE_KEYBOARD);
-
-    /* And return the appropriate value so we get rescheduled */
-    return xf86Info.kbdRate;
+	
+    pKeySyms->map        = map;
+    pKeySyms->mapWidth   = GLYPHS_PER_KEY;
+    pKeySyms->minKeyCode = MIN_KEYCODE;
+    pKeySyms->maxKeyCode = MAX_KEYCODE;
 }

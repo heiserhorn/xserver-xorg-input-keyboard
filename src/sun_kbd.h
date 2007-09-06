@@ -1,4 +1,4 @@
-/* Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
+/* Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the
@@ -29,41 +29,16 @@
 #ifndef _XORG_SUN_KBD_H_
 #define _XORG_SUN_KBD_H_
 
-/*
- * Keyboard common implementation routines shared by "keyboard" driver
- * in sun_io.c and "kbd" driver in sun_kbd.c
- */
-
 typedef struct {
-    int			kbdFD;
-    const char *	devName;
     int 		ktype;		/* Keyboard type from KIOCTYPE */
     Bool		kbdActive;	/* Have we set kbd modes for X? */
     int 		otranslation;	/* Original translation mode */
     int 		odirect;	/* Original "direct" mode setting */
     unsigned char	oleds;		/* Original LED state */
     const char *	strmod;		/* Streams module pushed on kbd device */
-    const unsigned char *keyMap;
 } sunKbdPrivRec, *sunKbdPrivPtr;
 
-/* sun_kbd.c */
-extern int  sunKbdOpen	(const char *devName, pointer options);
-extern int  sunKbdInit	(sunKbdPrivPtr priv, int kbdFD,
-			 const char *devName, pointer options);
-extern int  sunKbdOn	(sunKbdPrivPtr priv);
-extern int  sunKbdOff	(sunKbdPrivPtr priv);
-    
-extern void sunKbdSoundBell 	(sunKbdPrivPtr priv,
-				 int loudness, int pitch, int duration);
-
-extern void sunKbdSetLeds 	(sunKbdPrivPtr priv, int leds);
-extern int  sunKbdGetLeds 	(sunKbdPrivPtr priv);
-extern void sunKbdSetRepeat 	(sunKbdPrivPtr priv, char rad);
-
-/* sun_kbdEv.c */
-#include <sys/vuid_event.h>
-extern void sunPostKbdEvent	(int ktype, Firm_event *event);
-
-extern const unsigned char *sunGetKbdMapping(int ktype);
-
+/* sun_kbdMap.c */
+extern void KbdGetMapping 	(InputInfoPtr pInfo, KeySymsPtr pKeySyms,
+				 CARD8 *pModMap);
 #endif
