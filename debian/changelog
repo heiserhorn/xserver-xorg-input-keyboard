@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.2.2-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Julien Cristau <jcristau@debian.org>  Thu, 06 Sep 2007 18:22:02 +0200
+
 xserver-xorg-input-keyboard (1:1.2.0-2) experimental; urgency=low
 
   * Set distribution to unstable in debian/NEWS (closes: #428845).

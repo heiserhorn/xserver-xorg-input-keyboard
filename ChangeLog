@@ -1,3 +1,69 @@
+commit 3d88a17403df55d28e85ebc445b798cdce23e581
+Author: Eric Anholt <eric@anholt.net>
+Date:   Wed Sep 5 09:09:06 2007 -0700
+
+    Bump version to 1.2.2 for release.
+
+commit 3b87c8e164a5a4e79900b70e38e09c85bc99ce25
+Author: Eric Anholt <eric@anholt.net>
+Date:   Mon Aug 20 15:36:37 2007 -0700
+
+    Bug #9748: Include GPL license by Rik Faith for some lnx_kbd.c contents.
+    
+    The code in question was clearly copy-and-pasted from the kbdrate.c.c file.
+
+commit 095c59f70b58b87e627b3150f3a4694d66b75746
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Wed Jul 18 18:32:59 2007 -0700
+
+    Remove unused variables
+
+commit 7148a0c3e04668b7608295ebdf94579f6acfa544
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Wed Jul 18 17:29:16 2007 -0700
+
+    Sun bug 6312042: Preserve NumLock & CapsLock state on Xorg startup
+    
+    If either the NumLock or CapsLock leds on the keyboard are on at startup,
+    generate fake NumLock/CapsLock keypresses to set the server state to match.
+    <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6312042>
+    
+    Based on earlier Xsun fix for Sun bug #4185550
+    <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=4185550>
+
+commit db0254abb0ba68c6dfb2443d1170d9d1e895021d
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Wed Jul 18 16:30:35 2007 -0700
+
+    Remove old wrappers used for sharing code between keyboard & kbd drivers
+
+commit 256da8cc284a3a66a4a41ec7708b0b467c30b369
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Wed Jul 18 11:07:12 2007 -0700
+
+    Update key mappings before we walk them looking for modifiers, not after
+
+commit 8fe8b62ab3fcc8c51d61dcc2e658e6733da3edfb
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Tue Jul 17 20:11:17 2007 -0700
+
+    renamed: .cvsignore -> .gitignore
+
+commit 7e412914fc1e2372890c2af46263f4cefab8cbfe
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Tue Jul 17 20:10:50 2007 -0700
+
+    Update Solaris port to work with os layer move into kbd driver
+    
+    Also remove old code only needed for obsolete "keyboard" driver
+    Fix default keysym map on Solaris to work correctly when XKB fails
+
+commit 36cf953910002a00a3694033d49c6c38319b0283
+Author: Julien Cristau <jcristau@debian.org>
+Date:   Wed Jun 13 23:02:58 2007 +1000
+
+    Keep module version up-to-date using PACKAGE_VERSION_*
+
 commit 05dd89ef03cee6853e7c2db518b6b22785cc3e7c
 Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
 Date:   Mon Feb 5 14:29:54 2007 -0800
