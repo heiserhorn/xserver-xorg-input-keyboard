@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.2.2-2) UNRELEASED; urgency=low
+
+  * Add upstream URL to debian/copyright.
+
+ -- Brice Goglin <bgoglin@debian.org>  Sat, 15 Sep 2007 01:46:21 +0200
+
 xserver-xorg-input-keyboard (1:1.2.2-1) experimental; urgency=low
 
   * New upstream release.
