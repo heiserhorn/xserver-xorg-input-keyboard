@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.2.2-3) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- David Nusinow <dnusinow@debian.org>  Sun, 16 Sep 2007 15:13:37 -0400
+
 xserver-xorg-input-keyboard (1:1.2.2-2) UNRELEASED; urgency=low
 
   * Add upstream URL to debian/copyright.
