@@ -301,9 +301,39 @@ SoundKbdBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
     int	kbdCmd, i;
+#ifdef KIOCMKTONE
+    int cycles;
+    int mktonevalue;
+#endif
 
     if (loudness && pitch)
     {
+#ifdef KIOCMKTONE
+	if (pitch == 0)
+	    cycles = UINT16_MAX;
+	else if (pitch >= UINT16_MAX)
+	    cycles = 0;
+	else {
+	    cycles = (PIT_HZ + pitch / 2) / pitch;
+	    if (cycles > UINT16_MAX)
+		cycles = UINT16_MAX;
+	}
+
+	mktonevalue = cycles | (((duration * loudness * 20) / 1000) << 16);
+
+	errno = 0;
+	SYSCALL(i = ioctl (pInfo->fd, KIOCMKTONE, mktonevalue));
+	if (i == 0)
+	    return;
+
+	if (errno != EINVAL) {
+	    if (errno != EAGAIN)
+		xf86Msg(X_ERROR, "%s: Failed to activate bell: %s\n",
+			pInfo->name, strerror(errno));
+	    return;
+	}
+#endif
+
  	kbdCmd = KBD_CMD_BELL;
 		
 	SYSCALL(i = ioctl (pInfo->fd, KIOCCMD, &kbdCmd));
