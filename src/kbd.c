@@ -543,7 +543,6 @@ KbdProc(DeviceIntPtr device, int what)
      * passing on parts of the VT switch sequence.
      */
     if (pInfo->fd >= 0) {
-	sleep(1);
 	xf86FlushInput(pInfo->fd);
 	AddEnabledDevice(pInfo->fd);
     }
