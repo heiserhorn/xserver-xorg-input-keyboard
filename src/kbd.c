@@ -470,9 +470,16 @@ InitKBD(InputInfoPtr pInfo, Bool init)
   pKbd->scanPrefix      = 0;
 
   if (init) {
-      pKbd->keyLeds = 0;
-
+      pKbd->keyLeds = pKbd->GetLeds(pInfo);
       UpdateLeds(pInfo);
+      if (pKbd->keyLeds & CAPSFLAG) {
+	  pKbd->PostEvent(pInfo, KEY_CapsLock, TRUE);
+	  pKbd->PostEvent(pInfo, KEY_CapsLock, FALSE);
+      }
+      if (pKbd->keyLeds & NUMFLAG) {
+	  pKbd->PostEvent(pInfo, KEY_NumLock, TRUE);
+	  pKbd->PostEvent(pInfo, KEY_NumLock, FALSE);
+      }
 
       if( pKbd->delay <= 375) rad = 0x00;
       else if (pKbd->delay <= 625) rad = 0x20;
