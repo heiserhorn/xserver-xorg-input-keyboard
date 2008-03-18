@@ -76,7 +76,7 @@ settings.  Default: "xorg" for most platforms, but "xfree98" for the
 Japanese PC-98 platforms. If you use the "xorg" value then you can
 find listing of all valid values for these four options in the
 .I
-/usr/share/X11/xkb/rules/xorg.lst
+__xkb_path__/rules/xorg.lst
 file.
 .TP 7
 .BI "Option \*qXkbModel\*q \*q" modelname \*q
