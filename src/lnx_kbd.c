@@ -243,7 +243,6 @@ SetKbdRepeat(InputInfoPtr pInfo, char rad)
 typedef struct {
    int kbdtrans;
    struct termios kbdtty;
-   unsigned char oleds;		/* Original LED state */
 } LnxKbdPrivRec, *LnxKbdPrivPtr;
 
 static int
@@ -255,7 +254,6 @@ KbdInit(InputInfoPtr pInfo, int what)
     if (pKbd->isConsole) {
         ioctl (pInfo->fd, KDGKBMODE, &(priv->kbdtrans));
         tcgetattr (pInfo->fd, &(priv->kbdtty));
-        ioctl (pInfo->fd, KDGETLED, &priv->oleds);
     }
     if (!pKbd->CustomKeycodes) {
         pKbd->RemapScanCode = ATScancode;
@@ -287,19 +285,6 @@ KbdOn(InputInfoPtr pInfo, int what)
 	cfsetispeed(&nTty, 9600);
 	cfsetospeed(&nTty, 9600);
 	tcsetattr(pInfo->fd, TCSANOW, &nTty);
-
-	/* If Caps Lock or Num Lock LEDs are on when server starts,
-	 * send a fake key down on those keys to set the server state
-	 * to match the LED's.
-	 */
-	    if (priv->oleds & LED_CAP) {
-		pKbd->PostEvent(pInfo, KEY_CapsLock, TRUE);	/* Press */
-		pKbd->PostEvent(pInfo, KEY_CapsLock, FALSE);	/* Release */
-	    }
-	    if (priv->oleds & LED_NUM) {
-		pKbd->PostEvent(pInfo, KEY_NumLock, TRUE);	/* Press */
-		pKbd->PostEvent(pInfo, KEY_NumLock, FALSE);	/* Release */
-	    }
     }
     return Success;
 }
