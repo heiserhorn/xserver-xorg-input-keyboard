@@ -2,6 +2,9 @@ xserver-xorg-input-keyboard (1:1.3.0-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Update debian/copyright from upstream's COPYING file.
+  * Build against xserver 1.5 rc1.
+  * Bump Standards-Version to 3.7.3.
+  * Drop the XS- prefix from Vcs-* control fields.
 
  -- Julien Cristau <jcristau@debian.org>  Fri, 21 Mar 2008 19:51:07 +0100
 

@@ -3,10 +3,10 @@ Section: x11
 Priority: optional
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Uploaders: David Nusinow <dnusinow@debian.org>, Drew Parsons <dparsons@debian.org>, Julien Cristau <jcristau@debian.org>
-Build-Depends: debhelper (>= 5), pkg-config, xserver-xorg-dev (>= 2:1.4), x11proto-kb-dev, x11proto-input-dev, x11proto-core-dev, x11proto-randr-dev, quilt
-Standards-Version: 3.7.2
-XS-Vcs-Git: git://git.debian.org/git/pkg-xorg/driver/xserver-xorg-input-keyboard
-XS-Vcs-Browser: http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-input-keyboard.git
+Build-Depends: debhelper (>= 5), pkg-config, xserver-xorg-dev (>= 2:1.4.99.901), x11proto-kb-dev, x11proto-input-dev, x11proto-core-dev, x11proto-randr-dev, quilt
+Standards-Version: 3.7.3
+Vcs-Git: git://git.debian.org/git/pkg-xorg/driver/xserver-xorg-input-keyboard
+Vcs-Browser: http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-input-keyboard.git
 
 Package: xserver-xorg-input-kbd
 Architecture: any
