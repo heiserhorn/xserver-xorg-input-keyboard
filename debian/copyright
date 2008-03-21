@@ -130,6 +130,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Portions based on kbdrate.c from util-linux 2.9t, which is
 Copyright 1992 Rickard E. Faith.  Distributed under the GPL.
 This program comes with ABSOLUTELY NO WARRANTY.
+On Debian systems, the text of the GPL is available in
+/usr/share/common-licenses/GPL.
 
 
 
