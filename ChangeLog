@@ -1,3 +1,104 @@
+commit 86b16003ef1134a2471cd3f7ac217db574fa714c
+Author: Adam Jackson <ajax@redhat.com>
+Date:   Thu Mar 20 16:05:05 2008 -0400
+
+    keyboard 1.3.0
+
+commit af3adb8e24c03fcd86ad63208ce525cd4db876ac
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Mon Mar 17 19:19:45 2008 -0700
+
+    Correct COPYING file and note which notices apply to which code/OS'es
+
+commit 49bf7022f85886d06ba4991364e6e28f17d78f2b
+Author: Daniel Drake <ddrake@brontes3d.com>
+Date:   Mon May 21 13:53:01 2007 -0800
+
+    Bug 11026: xf86-input-keyboard COPYING file
+    
+    X.Org Bugzilla #11026 <https://bugs.freedesktop.org/show_bug.cgi?id=11026>
+
+commit 0382ed1c0c29ee19cfa8bff213ee32a7d0c06da9
+Author: Paulo Cesar Pereira de Andrade <pcpa@mandriva.com.br>
+Date:   Fri Feb 8 19:00:57 2008 -0200
+
+    Alternate patch to preserve NumLock & CapsLock leds at X Server startup.
+    
+      This patch requires reverting commits:
+    7148a0c3e04668b7608295ebdf94579f6acfa544 and
+    0f3716db01681876cc385727beeb842af5b950d3
+      Also, it is assumed that the os specific GetLeds will properly
+    use bit 0 for caps lock and bit 1 for num lock.
+    
+    Signed-off-by: Alan Coopersmith <alan.coopersmith@sun.com>
+
+commit 382ad4ef28b8393b385ac1d2426c5b22076ea165
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Mon Mar 17 18:48:47 2008 -0700
+
+    Revert previous attempts to sync lock state & LEDs
+    
+    See next commit for improved fix
+
+commit 0c8220690c726d61a250ad5aec9171009f523043
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Mon Mar 17 18:46:15 2008 -0700
+
+    Use $(XKBPATH) for xkb file path in man page
+
+commit e32e610b719c7dc7a78a1b991b12521863877e51
+Author: Matej Kosik <kosik@fiit.stuba.sk>
+Date:   Fri Feb 15 08:53:48 2008 -0800
+
+    Add information & example of XKB options to man page
+
+commit ea46dd17058f6a880ed38102d1fde1dcba1f8215
+Author: Matthieu Herrb <matthieu@bluenote.herrb.net>
+Date:   Sat Mar 8 23:04:13 2008 +0100
+
+    Makefile.am: nuke RCS Id
+
+commit 0f3716db01681876cc385727beeb842af5b950d3
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Wed Jan 16 10:18:59 2008 +1030
+
+    lnx: Automatically inherit the vt's numlock and capslock status (Bug #2243)
+    
+    X.Org Bug #2243 <https://bugs.freedesktop.org/show_bug.cgi?id=2243>
+
+commit 882b28a452db6ebe1499d9558d0028cebb0e032f
+Author: Matthieu Herrb <matthieu@bluenote.herrb.com>
+Date:   Wed Dec 12 22:43:04 2007 +0100
+
+    Fix parameters order for printWsType().
+
+commit b139da4553e71896689e8f522e5cff58f5bb7674
+Author: Adam Jackson <ajax@redhat.com>
+Date:   Mon Dec 3 11:57:40 2007 -0500
+
+    Don't sleep(1) on VT entry.
+
+commit ec247cd91cf147a8d1e79b0746680b049269798f
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Thu Oct 11 16:42:33 2007 -0700
+
+    Update kbd man page to say it has replaced keyboard driver now.
+
+commit 278c7d8f44ba7393a95ab1a4a557d6f385044022
+Author: David Marx <david.marx@sun.com>
+Date:   Wed Oct 10 16:18:12 2007 -0700
+
+    Sun bug #6425775 Xserver is blocked when a program rings keyboard-bell
+    
+    Use KIOCMKTONE ioctl instead on Solaris versions that have it
+    <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6425775>
+
+commit 10792dc1eebf9f718e0cad0b425a8b8307a7ebc7
+Author: Julien Cristau <jcristau@debian.org>
+Date:   Thu Sep 6 18:41:28 2007 +0200
+
+    Remove the legacy keyboard driver's manpage
+
 commit 3d88a17403df55d28e85ebc445b798cdce23e581
 Author: Eric Anholt <eric@anholt.net>
 Date:   Wed Sep 5 09:09:06 2007 -0700
