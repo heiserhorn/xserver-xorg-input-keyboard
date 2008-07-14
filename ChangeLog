@@ -1,3 +1,26 @@
+commit ef7873db2861a9aa103eaabbe84b4396e64ff3a1
+Author: Adam Jackson <ajax@redhat.com>
+Date:   Wed May 21 15:39:59 2008 -0400
+
+    keyboard 1.3.1
+
+commit a1866e2e73f0b401cd8e92fc9ee8db1791585936
+Author: Paulo Cesar Pereira de Andrade <pcpa@mandriva.com.br>
+Date:   Wed Apr 9 14:36:58 2008 -0300
+
+    Don't send events in DEVICE_INIT, only after DEVICE_ON.
+    
+    See http://bugs.freedesktop.org/show_bug.cgi?id=2243#c15 for a description of
+    the problem fixed in this patch.
+    
+    Now only the driver leds state is synched with virtual console state, and if
+    required, events are post in DEVICE_ON.
+    This also defines an internal INITFLAG state to know when DEVICE_ON is called
+    after DEVICE_INIT, otherwise, it will only send events for leds that changed
+    state while the device was in "DEVICE_OFF state".
+    
+    Signed-off-by: Peter Hutterer <peter@cs.unisa.edu.au>
+
 commit 86b16003ef1134a2471cd3f7ac217db574fa714c
 Author: Adam Jackson <ajax@redhat.com>
 Date:   Thu Mar 20 16:05:05 2008 -0400

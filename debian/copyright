@@ -1,6 +1,7 @@
 This package was downloaded from
 http://xorg.freedesktop.org/releases/individual/driver/
 
+
 Code common to all operating systems is covered by these notices:
 
 Copyright (c) 1992-2003 by The XFree86 Project, Inc.
@@ -130,9 +131,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Portions based on kbdrate.c from util-linux 2.9t, which is
 Copyright 1992 Rickard E. Faith.  Distributed under the GPL.
 This program comes with ABSOLUTELY NO WARRANTY.
+
 On Debian systems, the text of the GPL is available in
 /usr/share/common-licenses/GPL.
-
 
 
 Code for SCO operating systems is additionally covered by these notices:
@@ -233,4 +234,3 @@ Except as contained in this notice, the name of a copyright holder
 shall not be used in advertising or otherwise to promote the sale, use
 or other dealings in this Software without prior written authorization
 of the copyright holder.
-
