@@ -872,13 +872,8 @@ xf86KbdPlug(pointer	module,
 {
     static Bool Initialised = FALSE;
 
-    if (!Initialised) {
+    if (!Initialised)
 	Initialised = TRUE;
-#ifndef REMOVE_LOADER_CHECK_MODULE_INFO
-	if (xf86LoaderCheckSymbol("xf86AddModuleInfo"))
-#endif
-	xf86AddModuleInfo(&KbdInfo, module);
-    }
 
     xf86AddInputDriver(&KBD, module, 0);
 
