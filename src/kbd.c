@@ -1,6 +1,3 @@
-/* $XdotOrg: driver/xf86-input-keyboard/src/kbd.c,v 1.19 2005/11/09 21:31:23 kem Exp $ */
-/* $XFree86: xc/programs/Xserver/hw/xfree86/input/keyboard/kbd.c,v 1.8 2003/11/03 05:11:47 tsi Exp $ */
-
 /*
  * Copyright (c) 2002 by The XFree86 Project, Inc.
  * Author: Ivan Pascal.
@@ -12,7 +9,6 @@
  * xf86Events.c and xf86Io.c which are
  * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
  */
-/* $XdotOrg: driver/xf86-input-keyboard/src/kbd.c,v 1.19 2005/11/09 21:31:23 kem Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,16 +222,6 @@ CommonSpecialKey(int key, Bool down, int modifiers)
 	xf86ProcessActionEvent(ACTION_TERMINATE, NULL);
 	break;
 
-      /*
-       * Check grabs
-       */
-      case KEY_KP_Divide:
-	xf86ProcessActionEvent(ACTION_DISABLEGRAB, NULL);
-	break;
-      case KEY_KP_Multiply:
-	xf86ProcessActionEvent(ACTION_CLOSECLIENT, NULL);
-	break;
-	
 	/*
 	 * The idea here is to pass the scancode down to a list of
 	 * registered routines. There should be some standard conventions
