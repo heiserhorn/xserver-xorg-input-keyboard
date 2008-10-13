@@ -678,7 +678,7 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   }
 
 #ifndef TERMINATE_FALLBACK
-#define TERMINATE_FALLBACK 1
+#define TERMINATE_FALLBACK 0
 #endif
 #ifdef XKB
   if (noXkbExtension
