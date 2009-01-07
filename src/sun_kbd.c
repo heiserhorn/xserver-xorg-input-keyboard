@@ -264,9 +264,6 @@ KbdOff(InputInfoPtr pInfo, int what)
 static void
 SoundKbdBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
 {
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-
     int	kbdCmd, i;
 #ifdef KIOCMKTONE
     int cycles;

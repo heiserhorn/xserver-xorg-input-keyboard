@@ -571,7 +571,6 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
-    const unsigned char *keymap;
     int i;
     KeySym        *k;
     
