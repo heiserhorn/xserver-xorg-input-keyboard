@@ -454,12 +454,14 @@ static void
 InitKBD(InputInfoPtr pInfo, Bool init)
 {
   char            rad;
-  unsigned int    i;
   xEvent          kevent;
   KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 1
   DeviceIntPtr    pKeyboard = pInfo->dev;
   KeyClassRec     *keyc = pKeyboard->key;
   KeySym          *map = keyc->curKeySyms.map;
+  unsigned int    i;
+#endif
 
   kevent.u.keyButtonPointer.time = GetTimeInMillis();
   kevent.u.keyButtonPointer.rootX = 0;
