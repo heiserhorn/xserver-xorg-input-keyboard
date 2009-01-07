@@ -56,7 +56,7 @@ extern int XkbDfltRepeatInterval;
 #define MODEFLAG	8
 #define COMPOSEFLAG	16
 /* Used to know when the first DEVICE_ON after a DEVICE_INIT is called */
-#define INITFLAG	(1 << 31)
+#define INITFLAG	(1U << 31)
 
 static InputInfoPtr KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags);
 static int KbdProc(DeviceIntPtr device, int what);
@@ -395,7 +395,7 @@ static void
 UpdateLeds(InputInfoPtr pInfo)
 {
     KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    int leds = 0;
+    unsigned long leds = 0;
 
     if (pKbd->keyLeds & CAPSFLAG)    leds |= XLED1;
     if (pKbd->keyLeds & NUMFLAG)     leds |= XLED2;
@@ -410,7 +410,7 @@ UpdateLeds(InputInfoPtr pInfo)
 static int
 KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
 {
-   int leds;
+   unsigned long leds;
    InputInfoPtr pInfo = (InputInfoPtr) device->public.devicePrivate;
    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
 
@@ -515,7 +515,7 @@ InitKBD(InputInfoPtr pInfo, Bool init)
       else                         rad |= ((58 / pKbd->rate) - 2);
       pKbd->SetKbdRepeat(pInfo, rad);
   } else {
-      int leds = pKbd->keyLeds;
+      unsigned long leds = pKbd->keyLeds;
 
       pKbd->keyLeds = pKbd->GetLeds(pInfo);
       UpdateLeds(pInfo);
