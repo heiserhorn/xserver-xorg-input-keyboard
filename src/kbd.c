@@ -805,14 +805,14 @@ sunKeyboards:
       UpdateLeds(pInfo);
   }
 
+#if !defined(CSRG_BASED) && \
+    !defined(__GNU__) && \
+     defined(KB_84)
   if (!pKbd->CustomKeycodes) {
     /*
      * normal, non-keypad keys
      */
     if (scanCode < KEY_KP_7 || scanCode > KEY_KP_Decimal) {
-#if !defined(CSRG_BASED) && \
-    !defined(__GNU__) && \
-     defined(KB_84)
       /*
        * magic ALT_L key on AT84 keyboards for multilingual support
        */
@@ -822,9 +822,10 @@ sunKeyboards:
 	{
 	  UsePrefix = TRUE;
 	}
-#endif /* !CSRG_BASED && ... */
     }
   }
+#endif /* !CSRG_BASED && !GNU && KB_84 */
+
 #ifdef XKB
   }
 #endif
