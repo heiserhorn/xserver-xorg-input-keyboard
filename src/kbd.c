@@ -138,6 +138,12 @@ static const OptionInfoRec KeyboardOptions[] = {
     { -1,			NULL,		  OPTV_NONE,	{0}, FALSE }
 };
 
+/* Xorg 1.6 and earlier put the default XKB rules file in __XKBDEFRULES__
+   in xorg-server.h, later versions switched to XKB_DFLT_RULES */
+#if !defined(XKB_DFLT_RULES) && defined(__XKBDEFRULES__)
+# define XKB_DFLT_RULES __XKBDEFRULES__
+#endif
+
 static const char *kbdDefaults[] = {
 #ifdef XQUEUE 
     "Protocol",		"Xqueue",
@@ -145,7 +151,7 @@ static const char *kbdDefaults[] = {
     "Protocol",		"standard",
 #endif
     "AutoRepeat",	"500 30",
-    "XkbRules",		__XKBDEFRULES__,
+    "XkbRules",		XKB_DFLT_RULES,
     "XkbModel",		"pc105",
     "XkbLayout",	"us",
     "Panix106",		"off",
