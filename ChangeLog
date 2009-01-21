@@ -1,3 +1,54 @@
+commit 708ecbf8557d9e676e3bb07c1f83170f6d9f7cd7
+Author: Paulo Cesar Pereira de Andrade <pcpa@mandriva.com.br>
+Date:   Wed Jan 7 15:09:01 2009 -0200
+
+    Update for servers newer then 1.5 or git master.
+    
+      The atKeynames.h header was moved to the kbd driver sources as
+    well as the xf86CommonSpecialKey() function. This problem probably
+    got unnoticed for quite sometime, mainly because most people doing
+    regular builds should either not have been building the kbd driver,
+    or had atKeynames.h in /usr/include/xorg from a previous install.
+
+commit 9294caab68d58d13f429b7c0b23541b99f2b0dae
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Tue Nov 18 18:40:58 2008 -0800
+
+    Renamed subdir .cvsignore files to .gitignore
+
+commit 74b6461c5362e3401fdcf5a080bf71e6f7908e09
+Author: Alan Coopersmith <alan.coopersmith@sun.com>
+Date:   Tue Nov 11 17:35:55 2008 -0800
+
+    sun_kbd.c: Don't try to repeat shutdown actions on already closed keyboard
+
+commit 3e28d68b50d291938734e9684b8296ca864f3892
+Author: Luc Verhaegen <libv@skynet.be>
+Date:   Mon Oct 13 15:22:32 2008 +0200
+
+    Set TERMINATE_FALLBACK to 0.
+    
+    This stops the keyboard driver from sending 2 extra ctrl-alt-backspace
+    events to the server.
+
+commit eecfd24481b5768692409666b16b666e71ec97f8
+Author: Adam Jackson <ajax@redhat.com>
+Date:   Tue Aug 19 15:28:02 2008 -0400
+
+    Remove useless call to xf86AddModuleInfo
+
+commit 574442b906fa8ff600d2fd32fdb2bf953b3bb5fa
+Author: Adam Jackson <ajax@redhat.com>
+Date:   Tue Aug 19 10:20:47 2008 -0400
+
+    Remove XFree86-Misc leftovers.
+
+commit 80b04aa649f5e65294439264b6bbb0dc90c22a7c
+Author: Kristian Høgsberg <krh@redhat.com>
+Date:   Thu Jul 24 16:39:02 2008 -0400
+
+    Move atKeynames.h and xf86CommonSpecialKey() here.
+
 commit ef7873db2861a9aa103eaabbe84b4396e64ff3a1
 Author: Adam Jackson <ajax@redhat.com>
 Date:   Wed May 21 15:39:59 2008 -0400
