@@ -1,3 +1,4 @@
+.deps
 Makefile
 Makefile.in
 *.la
@@ -19,3 +20,6 @@ missing
 stamp-h1
 *~
 kbd.4
+xf86-input-keyboard-*.tar.*
+ChangeLog
+tags

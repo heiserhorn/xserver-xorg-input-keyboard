@@ -275,7 +275,7 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
     pInfo->fd = -1;
     pInfo->dev = NULL;
     pInfo->private_flags = 0;
-    pInfo->always_core_feedback = 0;
+    pInfo->always_core_feedback = NULL;
     pInfo->conf_idev = dev;
 
     if (!xf86IsPc98())
