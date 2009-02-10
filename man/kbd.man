@@ -91,7 +91,7 @@ but "pc98" for the Japanese PC-98 platforms.
 .BI "Option \*qXkbLayout\*q \*q" layoutname \*q
 specifies the XKB keyboard layout name.  This is usually the country or
 language type of the keyboard.  Default: "us" for most platforms, but
-"nec/jp" for the Japanese PC-98 platforms.
+"jp" for the Japanese PC-98 platforms.
 .TP 7
 .BI "Option \*qXkbVariant\*q \*q" variants \*q
 specifies the XKB keyboard variant components.  These can be used to

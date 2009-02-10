@@ -162,7 +162,7 @@ static const char *kbd98Defaults[] = {
     "AutoRepeat",	"500 30",
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
-    "XkbLayout",	"nec/jp",
+    "XkbLayout",	"jp",
     "CustomKeycodes",	"off",
     NULL
 };
