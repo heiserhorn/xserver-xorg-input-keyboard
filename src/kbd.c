@@ -320,9 +320,6 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
       }
   }
 
-  if ((xkb_model && !strcmp(xkb_model, "sun")) ||
-      (xkb_rules && !strcmp(xkb_rules, "sun")))
-       pKbd->sunKbd = TRUE;
 #endif
 
   pKbd->CustomKeycodes = FALSE;
@@ -592,19 +589,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   if (xf86inSuspend)
       return;
 
-  if (pKbd->sunKbd) {
-     /*
-      * XXX XXX XXX:
-      *
-      * I really don't know what's wrong here, but passing the real
-      * scanCode offsets by one from XKB's point of view.
-      *
-      * (ecd@skynet.be, 980405)
-      */
-      scanCode--;
-      goto sunKeyboards;
-  }
-
   /*
    * First do some special scancode remapping ...
    */
@@ -634,7 +618,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   }
 #endif
 
-sunKeyboards:
   /*
    * Now map the scancodes to real X-keycodes ...
    */
