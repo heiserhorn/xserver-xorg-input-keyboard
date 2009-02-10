@@ -105,7 +105,6 @@ typedef enum {
     OPTION_XKB_LAYOUT,
     OPTION_XKB_VARIANT,
     OPTION_XKB_OPTIONS,
-    OPTION_PANIX106,
     OPTION_CUSTOM_KEYCODES
 } KeyboardOpts;
 
@@ -130,7 +129,6 @@ static const OptionInfoRec KeyboardOptions[] = {
     { OPTION_XKB_LAYOUT,	"XkbLayout",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_VARIANT,	"XkbVariant",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_OPTIONS,	"XkbOptions",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_PANIX106,		"Panix106",	  OPTV_BOOLEAN,	{0}, FALSE },
     { OPTION_CUSTOM_KEYCODES,   "CustomKeycodes", OPTV_BOOLEAN,	{0}, FALSE },
     { -1,			NULL,		  OPTV_NONE,	{0}, FALSE }
 };
@@ -151,7 +149,6 @@ static const char *kbdDefaults[] = {
     "XkbRules",		XKB_DFLT_RULES,
     "XkbModel",		"pc105",
     "XkbLayout",	"us",
-    "Panix106",		"off",
     "CustomKeycodes",	"off",
     NULL
 };
@@ -166,7 +163,6 @@ static const char *kbd98Defaults[] = {
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
     "XkbLayout",	"nec/jp",
-    "Panix106",		"off",
     "CustomKeycodes",	"off",
     NULL
 };
@@ -327,13 +323,6 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
   if ((xkb_model && !strcmp(xkb_model, "sun")) ||
       (xkb_rules && !strcmp(xkb_rules, "sun")))
        pKbd->sunKbd = TRUE;
-#endif
-
-#if defined(SVR4) && defined(i386)
-  if ((pKbd->Panix106 =
-      xf86SetBoolOption(pInfo->options, "Panix106", FALSE))) {
-      xf86Msg(X_CONFIG, "%s: PANIX106: enabled\n", pInfo->name);
-  }
 #endif
 
   pKbd->CustomKeycodes = FALSE;

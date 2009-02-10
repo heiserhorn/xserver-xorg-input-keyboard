@@ -89,7 +89,6 @@ typedef struct {
     int			consType;
     int			wsKbdType;
     Bool		sunKbd;
-    Bool		Panix106;
 
 } KbdDevRec, *KbdDevPtr;
 
