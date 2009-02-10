@@ -38,11 +38,9 @@
 #include "xf86OSKbd.h"
 #include "compiler.h"
 
-#ifdef XKB
 #include <X11/extensions/XKB.h>
 #include <X11/extensions/XKBstr.h>
 #include <X11/extensions/XKBsrv.h>
-#endif
 
 extern int XkbDfltRepeatDelay;
 extern int XkbDfltRepeatInterval;
@@ -93,7 +91,6 @@ typedef enum {
     OPTION_PROTOCOL,
     OPTION_AUTOREPEAT,
     OPTION_XLEDS,
-    OPTION_XKB_DISABLE,
     OPTION_XKB_KEYMAP,
     OPTION_XKB_KEYCODES,
     OPTION_XKB_TYPES,
@@ -117,7 +114,6 @@ static const OptionInfoRec KeyboardOptions[] = {
     { OPTION_PROTOCOL,		"Protocol",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_AUTOREPEAT,	"AutoRepeat",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XLEDS,		"XLeds",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_DISABLE,	"XkbDisable",	  OPTV_BOOLEAN,	{0}, FALSE },
     { OPTION_XKB_KEYMAP,	"XkbKeymap",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_KEYCODES,	"XkbKeycodes",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_TYPES,		"XkbTypes",	  OPTV_STRING,	{0}, FALSE },
@@ -173,7 +169,6 @@ const char *xkbSymbols[] = {
 	NULL,
 };
 
-#ifdef XKB
 static char *xkb_rules;
 static char *xkb_model;
 static char *xkb_layout;
@@ -181,7 +176,6 @@ static char *xkb_variant;
 static char *xkb_options;
 
 static XkbComponentNamesRec xkbnames;
-#endif /* XKB */
 
 /*ARGSUSED*/
 static const OptionInfoRec *
@@ -288,39 +282,24 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
         xfree(s);
     }
 
-#ifdef XKB
-
-/* XkbDisable must be a server flag but for compatibility we check it here */
-
-  if (xf86FindOption(pInfo->options, "XkbDisable"))
-      xf86Msg(X_WARNING,
-             "%s: XKB can't be disabled here. Use \"ServerFlags\" section.\n",
+  SetXkbOption(pInfo, "XkbKeymap", &xkbnames.keymap);
+  if (xkbnames.keymap) {
+      xf86Msg(X_CONFIG, "%s: XkbKeymap overrides all other XKB settings\n",
               pInfo->name);
-
-  pKbd->noXkb = noXkbExtension;
-  if (pKbd->noXkb) {
-      xf86Msg(X_CONFIG, "XKB: disabled\n");
   } else {
-      SetXkbOption(pInfo, "XkbKeymap", &xkbnames.keymap);
-      if (xkbnames.keymap) {
-          xf86Msg(X_CONFIG, "%s: XkbKeymap overrides all other XKB settings\n",
-                  pInfo->name);
-      } else {
-          SetXkbOption(pInfo, "XkbRules", &xkb_rules);
-          SetXkbOption(pInfo, "XkbModel", &xkb_model);
-          SetXkbOption(pInfo, "XkbLayout", &xkb_layout);
-          SetXkbOption(pInfo, "XkbVariant", &xkb_variant);
-          SetXkbOption(pInfo, "XkbOptions", &xkb_options);
+      SetXkbOption(pInfo, "XkbRules", &xkb_rules);
+      SetXkbOption(pInfo, "XkbModel", &xkb_model);
+      SetXkbOption(pInfo, "XkbLayout", &xkb_layout);
+      SetXkbOption(pInfo, "XkbVariant", &xkb_variant);
+      SetXkbOption(pInfo, "XkbOptions", &xkb_options);
 
-          SetXkbOption(pInfo, "XkbKeycodes", &xkbnames.keycodes);
-          SetXkbOption(pInfo, "XkbTypes", &xkbnames.types);
-          SetXkbOption(pInfo, "XkbCompat", &xkbnames.compat);
-          SetXkbOption(pInfo, "XkbSymbols", &xkbnames.symbols);
-          SetXkbOption(pInfo, "XkbGeometry", &xkbnames.geometry);
-      }
+      SetXkbOption(pInfo, "XkbKeycodes", &xkbnames.keycodes);
+      SetXkbOption(pInfo, "XkbTypes", &xkbnames.types);
+      SetXkbOption(pInfo, "XkbCompat", &xkbnames.compat);
+      SetXkbOption(pInfo, "XkbSymbols", &xkbnames.symbols);
+      SetXkbOption(pInfo, "XkbGeometry", &xkbnames.geometry);
   }
 
-#endif
 
   pKbd->CustomKeycodes = FALSE;
   from = X_DEFAULT; 
@@ -391,15 +370,7 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
        pKbd->keyLeds &= ~COMPOSEFLAG;
    }
    leds = ctrl->leds & ~(XCAPS | XNUM | XSCR); /* ??? */
-#ifdef XKB
-   if (pKbd->noXkb) {
-#endif
-       pKbd->leds = (leds & pKbd->xledsMask) | (pKbd->leds & ~pKbd->xledsMask);
-#ifdef XKB
-  } else {
-       pKbd->leds = leds;
-  }
-#endif
+   pKbd->leds = leds;
   pKbd->SetLeds(pInfo, pKbd->leds);
   pKbd->autoRepeat = ctrl->autoRepeat;
 }
@@ -498,37 +469,25 @@ KbdProc(DeviceIntPtr device, int what)
 
   switch (what) {
      case DEVICE_INIT:
-        ret = pKbd->KbdInit(pInfo, what);
-	if (ret != Success)
-	    return ret;
+         ret = pKbd->KbdInit(pInfo, what);
+         if (ret != Success)
+             return ret;
 
-        pKbd->KbdGetMapping(pInfo, &keySyms, modMap);
+         pKbd->KbdGetMapping(pInfo, &keySyms, modMap);
 
-        device->public.on = FALSE;
-#ifdef XKB
-        if (pKbd->noXkb) {
-#endif
-            InitKeyboardDeviceStruct((DevicePtr) device,
-                             &keySyms,
-                             modMap,
-                             KbdBell,
-                             (KbdCtrlProcPtr)KbdCtrl);
-#ifdef XKB
-        } else {
-            if (xkbnames.keymap)
-                xkb_rules = NULL;
-            XkbSetRulesDflts(xkb_rules, xkb_model, xkb_layout,
-                             xkb_variant, xkb_options);
-            XkbInitKeyboardDeviceStruct(device,
-                                        &xkbnames,
-                                        &keySyms,
-                                        modMap,
-                                        KbdBell,
-                                        (KbdCtrlProcPtr)KbdCtrl);
-    }
-#endif
-    InitKBD(pInfo, TRUE);
-    break;
+         device->public.on = FALSE;
+         if (xkbnames.keymap)
+             xkb_rules = NULL;
+         XkbSetRulesDflts(xkb_rules, xkb_model, xkb_layout,
+                 xkb_variant, xkb_options);
+         XkbInitKeyboardDeviceStruct(device,
+                 &xkbnames,
+                 &keySyms,
+                 modMap,
+                 KbdBell,
+                 (KbdCtrlProcPtr)KbdCtrl);
+         InitKBD(pInfo, TRUE);
+         break;
   case DEVICE_ON:
     if (device->public.on)
 	break;
@@ -574,12 +533,8 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   DeviceIntPtr device = pInfo->dev;
   KeyClassRec  *keyc = device->key;
   KbdFeedbackClassRec *kbdfeed = device->kbdfeed;
-
-  Bool        UsePrefix = FALSE;
   KeySym      *keysym;
   int         keycode;
-  unsigned long changeLock = 0;
-  static int  lockkeys = 0;
 
 #ifdef DEBUG
   ErrorF("kbd driver rec scancode: 0x02%x %s\n", scanCode, down?"down":"up");
@@ -626,115 +581,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 	    keyc->curKeySyms.mapWidth * 
 	    (keycode - keyc->curKeySyms.minKeyCode));
 
-#ifdef XKB
-  if (pKbd->noXkb) {
-#endif
-  /*
-   * Filter autorepeated caps/num/scroll lock keycodes.
-   */
-  if( down ) {
-    switch( keysym[0] ) {
-        case XK_Caps_Lock :
-          if (lockkeys & CAPSFLAG)
-              return;
-	  else
-	      lockkeys |= CAPSFLAG;
-          break;
-
-        case XK_Num_Lock :
-          if (lockkeys & NUMFLAG)
-              return;
-	  else
-	      lockkeys |= NUMFLAG;
-          break;
-
-        case XK_Scroll_Lock :
-          if (lockkeys & SCROLLFLAG)
-              return;
-	  else
-	      lockkeys |= SCROLLFLAG;
-          break;
-    }
-    if (keysym[1] == XF86XK_ModeLock)
-    {
-      if (lockkeys & MODEFLAG)
-          return;
-      else
-          lockkeys |= MODEFLAG;
-    }
-  }
-  else {
-    switch( keysym[0] ) {
-        case XK_Caps_Lock :
-            lockkeys &= ~CAPSFLAG;
-            break;
-
-        case XK_Num_Lock :
-            lockkeys &= ~NUMFLAG;
-            break;
-
-        case XK_Scroll_Lock :
-            lockkeys &= ~SCROLLFLAG;
-            break;
-    }
-    if (keysym[1] == XF86XK_ModeLock)
-      lockkeys &= ~MODEFLAG;
-  }
-
-  /*
-   * LockKey special handling:
-   * ignore releases, toggle on & off on presses.
-   * Don't deal with the Caps_Lock keysym directly, but check the lock modifier
-   */
-
-   if (keyc->modifierMap[keycode] & LockMask)
-       changeLock = CAPSFLAG;
-   if (keysym[0] == XK_Num_Lock)
-       changeLock = NUMFLAG;
-   if (keysym[0] == XK_Scroll_Lock)
-       changeLock = SCROLLFLAG;
-   if (keysym[1] == XF86XK_ModeLock)
-       changeLock = MODEFLAG;
-
-   if (changeLock) {
-      if (!down)
-          return;
-
-      pKbd->keyLeds &= ~changeLock;
-
-      if (KeyPressed(keycode)) {
-	  down = !down;
-      } else {
-          pKbd->keyLeds |= changeLock;
-      }
-      UpdateLeds(pInfo);
-  }
-
-#if !defined(CSRG_BASED) && \
-    !defined(__GNU__) && \
-     defined(KB_84)
-  if (!pKbd->CustomKeycodes) {
-    /*
-     * normal, non-keypad keys
-     */
-    if (scanCode < KEY_KP_7 || scanCode > KEY_KP_Decimal) {
-      /*
-       * magic ALT_L key on AT84 keyboards for multilingual support
-       */
-      if (pKbd->kbdType == KB_84 &&
-	  ModifierDown(AltMask) &&
-	  keysym[2] != NoSymbol)
-	{
-	  UsePrefix = TRUE;
-	}
-    }
-  }
-#endif /* !CSRG_BASED && !GNU && KB_84 */
-
-#ifdef XKB
-  }
-#endif
-
   /*
    * check for an autorepeat-event
    */
@@ -748,15 +594,7 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 	  return;
   }
 
-   if (UsePrefix) {
-      xf86PostKeyboardEvent(device,
-              keyc->modifierKeyMap[keyc->maxKeysPerModifier*7], TRUE);
-      xf86PostKeyboardEvent(device, keycode, down);
-      xf86PostKeyboardEvent(device,
-              keyc->modifierKeyMap[keyc->maxKeysPerModifier*7], FALSE);
-   } else {
-      xf86PostKeyboardEvent(device, keycode, down);
-   }
+  xf86PostKeyboardEvent(device, keycode, down);
 }
 
 ModuleInfoRec KbdInfo = {

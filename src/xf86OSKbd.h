@@ -78,7 +78,6 @@ typedef struct {
     int			scanPrefix;
     Bool		vtSwitchSupported;
     Bool		CustomKeycodes;
-    Bool		noXkb;
     Bool		isConsole;
     TransMapPtr         scancodeMap;
     TransMapPtr         specialMap;
