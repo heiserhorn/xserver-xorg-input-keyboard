@@ -55,14 +55,6 @@ Standard, Xqueue.
 Not all protocols are supported on all platforms.  Default: "Standard".
 .RE
 .TP 7
-.BI "Option \*qAutoRepeat\*q \*q" "delay rate" \*q
-sets the auto repeat behaviour for the keyboard.  This is not implemented
-on all platforms.
-.I delay
-is the time in milliseconds before a key starts repeating.
-.I rate
-is the number of times a key repeats per second.  Default: "500 30".
-.TP 7
 .BI "Option \*qXLeds\*q \*q" ledlist \*q
 makes the keyboard LEDs specified in
 .I ledlist

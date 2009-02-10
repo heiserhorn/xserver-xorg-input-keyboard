@@ -242,17 +242,6 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
         return pInfo;
     }
 
-    if ((s = xf86SetStrOption(pInfo->options, "AutoRepeat", NULL))) {
-        int delay, rate;
-        if (sscanf(s, "%d %d", &delay, &rate) != 2) {
-            xf86Msg(X_ERROR, "\"%s\" is not a valid AutoRepeat value", s);
-        } else {
-            pKbd->delay = delay;
-            pKbd->rate = rate;
-        }
-        xfree(s);
-    }
-
     if ((s = xf86SetStrOption(pInfo->options, "XLeds", NULL))) {
         char *l, *end;
         unsigned int i;
@@ -365,7 +354,6 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
 static void
 InitKBD(InputInfoPtr pInfo, Bool init)
 {
-  char            rad;
   xEvent          kevent;
   KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 1
@@ -418,14 +406,6 @@ InitKBD(InputInfoPtr pInfo, Bool init)
       pKbd->keyLeds = pKbd->GetLeds(pInfo);
       UpdateLeds(pInfo);
       pKbd->keyLeds |= INITFLAG;
-      if( pKbd->delay <= 375) rad = 0x00;
-      else if (pKbd->delay <= 625) rad = 0x20;
-      else if (pKbd->delay <= 875) rad = 0x40;
-      else                         rad = 0x60;
-      if      (pKbd->rate <=  2)   rad |= 0x1F;
-      else if (pKbd->rate >= 30)   rad |= 0x00;
-      else                         rad |= ((58 / pKbd->rate) - 2);
-      pKbd->SetKbdRepeat(pInfo, rad);
   } else {
       unsigned long leds = pKbd->keyLeds;
 

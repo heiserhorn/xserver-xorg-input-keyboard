@@ -67,8 +67,6 @@ typedef struct {
     OpenKeyboardProc	OpenKeyboard;
     PostEventProc	PostEvent;
 
-    int			rate;
-    int			delay;
     int			bell_pitch;
     int			bell_duration;
     Bool		autoRepeat;
