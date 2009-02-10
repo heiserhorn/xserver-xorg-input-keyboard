@@ -38,9 +38,8 @@
 #include "xf86OSKbd.h"
 #include "compiler.h"
 
-#include <X11/extensions/XKB.h>
-#include <X11/extensions/XKBstr.h>
-#include <X11/extensions/XKBsrv.h>
+#include "xkbstr.h"
+#include "xkbsrv.h"
 
 #define CAPSFLAG	1
 #define NUMFLAG		2
@@ -88,12 +87,6 @@ typedef enum {
     OPTION_PROTOCOL,
     OPTION_AUTOREPEAT,
     OPTION_XLEDS,
-    OPTION_XKB_KEYMAP,
-    OPTION_XKB_KEYCODES,
-    OPTION_XKB_TYPES,
-    OPTION_XKB_COMPAT,
-    OPTION_XKB_SYMBOLS,
-    OPTION_XKB_GEOMETRY,
     OPTION_XKB_RULES,
     OPTION_XKB_MODEL,
     OPTION_XKB_LAYOUT,
@@ -111,12 +104,6 @@ static const OptionInfoRec KeyboardOptions[] = {
     { OPTION_PROTOCOL,		"Protocol",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_AUTOREPEAT,	"AutoRepeat",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XLEDS,		"XLeds",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_KEYMAP,	"XkbKeymap",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_KEYCODES,	"XkbKeycodes",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_TYPES,		"XkbTypes",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_COMPAT,	"XkbCompat",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_SYMBOLS,	"XkbSymbols",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_GEOMETRY,	"XkbGeometry",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_RULES,		"XkbRules",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_MODEL,		"XkbModel",	  OPTV_STRING,	{0}, FALSE },
     { OPTION_XKB_LAYOUT,	"XkbLayout",	  OPTV_STRING,	{0}, FALSE },
@@ -165,8 +152,6 @@ static char *xkb_model;
 static char *xkb_layout;
 static char *xkb_variant;
 static char *xkb_options;
-
-static XkbComponentNamesRec xkbnames;
 
 /*ARGSUSED*/
 static const OptionInfoRec *
@@ -258,24 +243,11 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
         xfree(s);
     }
 
-  SetXkbOption(pInfo, "XkbKeymap", &xkbnames.keymap);
-  if (xkbnames.keymap) {
-      xf86Msg(X_CONFIG, "%s: XkbKeymap overrides all other XKB settings\n",
-              pInfo->name);
-  } else {
-      SetXkbOption(pInfo, "XkbRules", &xkb_rules);
-      SetXkbOption(pInfo, "XkbModel", &xkb_model);
-      SetXkbOption(pInfo, "XkbLayout", &xkb_layout);
-      SetXkbOption(pInfo, "XkbVariant", &xkb_variant);
-      SetXkbOption(pInfo, "XkbOptions", &xkb_options);
-
-      SetXkbOption(pInfo, "XkbKeycodes", &xkbnames.keycodes);
-      SetXkbOption(pInfo, "XkbTypes", &xkbnames.types);
-      SetXkbOption(pInfo, "XkbCompat", &xkbnames.compat);
-      SetXkbOption(pInfo, "XkbSymbols", &xkbnames.symbols);
-      SetXkbOption(pInfo, "XkbGeometry", &xkbnames.geometry);
-  }
-
+    SetXkbOption(pInfo, "XkbRules", &xkb_rules);
+    SetXkbOption(pInfo, "XkbModel", &xkb_model);
+    SetXkbOption(pInfo, "XkbLayout", &xkb_layout);
+    SetXkbOption(pInfo, "XkbVariant", &xkb_variant);
+    SetXkbOption(pInfo, "XkbOptions", &xkb_options);
 
   pKbd->CustomKeycodes = FALSE;
   from = X_DEFAULT; 
@@ -443,16 +415,28 @@ KbdProc(DeviceIntPtr device, int what)
          pKbd->KbdGetMapping(pInfo, &keySyms, modMap);
 
          device->public.on = FALSE;
-         if (xkbnames.keymap)
-             xkb_rules = NULL;
-         XkbSetRulesDflts(xkb_rules, xkb_model, xkb_layout,
-                 xkb_variant, xkb_options);
-         XkbInitKeyboardDeviceStruct(device,
-                 &xkbnames,
-                 &keySyms,
-                 modMap,
-                 KbdBell,
-                 (KbdCtrlProcPtr)KbdCtrl);
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 5
+         {
+             XkbRMLVOSet rmlvo;
+             rmlvo.rules = xkb_rules;
+             rmlvo.model = xkb_model;
+             rmlvo.layout = xkb_layout;
+             rmlvo.variant = xkb_variant;
+             rmlvo.options = xkb_options;
+
+             InitKeyboardDeviceStruct(device, &rmlvo, KbdBell, KbdCtrl);
+         }
+#else
+         {
+             XkbComponentNamesRec xkbnames;
+             memset(&xkbnames, 0, sizeof(xkbnames));
+             XkbSetRulesDflts(xkb_rules, xkb_model, xkb_layout,
+                              xkb_variant, xkb_options);
+             XkbInitKeyboardDeviceStruct(device, &xkbnames, &keySyms,
+                                         modMap, KbdBell,
+                                         (KbdCtrlProcPtr)KbdCtrl);
+         }
+#endif /* XINPUT ABI 5*/
          InitKBD(pInfo, TRUE);
          break;
   case DEVICE_ON:
@@ -499,8 +483,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   KbdDevPtr    pKbd = (KbdDevPtr) pInfo->private;
   DeviceIntPtr device = pInfo->dev;
   KeyClassRec  *keyc = device->key;
-  KeySym      *keysym;
-  int         keycode;
 
 #ifdef DEBUG
   ErrorF("kbd driver rec scancode: 0x02%x %s\n", scanCode, down?"down":"up");
@@ -524,30 +506,25 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
      }
   }
 
-#ifndef __sparc64__
   /*
    * PC keyboards generate separate key codes for
    * Alt+Print and Control+Pause but in the X keyboard model
    * they need to get the same key code as the base key on the same
    * physical keyboard key.
    */
+
   if (!xf86IsPc98()) {
-    if (ModifierDown(AltMask) && (scanCode == KEY_SysReqest))
+    int state;
+
+    state = XkbStateFieldFromRec(&keyc->xkbInfo->state);
+
+    if (((state & AltMask) == AltMask) && (scanCode == KEY_SysReqest))
       scanCode = KEY_Print;
     else if (scanCode == KEY_Break)
       scanCode = KEY_Pause;
   }
-#endif
 
-  /*
-   * Now map the scancodes to real X-keycodes ...
-   */
-  keycode = scanCode + MIN_KEYCODE;
-  keysym = (keyc->curKeySyms.map +
-	    keyc->curKeySyms.mapWidth * 
-	    (keycode - keyc->curKeySyms.minKeyCode));
-
-  xf86PostKeyboardEvent(device, keycode, down);
+  xf86PostKeyboardEvent(device, scanCode + MIN_KEYCODE, down);
 }
 
 ModuleInfoRec KbdInfo = {
