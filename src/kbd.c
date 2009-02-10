@@ -57,7 +57,7 @@ extern int XkbDfltRepeatInterval;
 
 static InputInfoPtr KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags);
 static int KbdProc(DeviceIntPtr device, int what);
-static int KbdCtrl(DeviceIntPtr device, KeybdCtrl *ctrl);
+static void KbdCtrl(DeviceIntPtr device, KeybdCtrl *ctrl);
 static void KbdBell(int percent, DeviceIntPtr dev, pointer ctrl, int unused);
 static void PostKbdEvent(InputInfoPtr pInfo, unsigned int key, Bool down);
 
@@ -377,7 +377,7 @@ UpdateLeds(InputInfoPtr pInfo)
     pKbd->SetLeds(pInfo, pKbd->leds);
 }
 
-static int
+static void
 KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
 {
    unsigned long leds;
@@ -416,8 +416,6 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
 #endif
   pKbd->SetLeds(pInfo, pKbd->leds);
   pKbd->autoRepeat = ctrl->autoRepeat;
-
-  return (Success);
 }
 
 static void
