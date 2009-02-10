@@ -43,9 +43,6 @@ typedef	int	(*GetLedsProc)(InputInfoPtr pInfo);
 typedef	void	(*SetKbdRepeatProc)(InputInfoPtr pInfo, char rad);
 typedef	void	(*KbdGetMappingProc)(InputInfoPtr pInfo,
                                      KeySymsPtr pKeySyms, CARD8* pModMap);
-typedef	int	(*GetSpecialKeyProc)(InputInfoPtr pInfo, int scanCode);
-typedef	Bool	(*SpecialKeyProc)(InputInfoPtr pInfo,
-                                     int key, Bool down, int modifiers);
 typedef	int	(*RemapScanCodeProc)(InputInfoPtr pInfo, int *scanCode);
 typedef	Bool	(*OpenKeyboardProc)(InputInfoPtr pInfo);
 typedef	void	(*PostEventProc)(InputInfoPtr pInfo,
@@ -66,8 +63,6 @@ typedef struct {
     SetKbdRepeatProc	SetKbdRepeat;
     KbdGetMappingProc	KbdGetMapping;
     RemapScanCodeProc	RemapScanCode;
-    GetSpecialKeyProc	GetSpecialKey;
-    SpecialKeyProc	SpecialKey;
 
     OpenKeyboardProc	OpenKeyboard;
     PostEventProc	PostEvent;

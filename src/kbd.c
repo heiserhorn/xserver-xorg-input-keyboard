@@ -213,39 +213,6 @@ SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
     }
 }
 
-
-#define ModifierIsSet(k) ((modifiers & (k)) == (k))
-
-static Bool
-CommonSpecialKey(int key, Bool down, int modifiers)
-{
-  if ((!ModifierIsSet(ShiftMask)) &&
-      (((ModifierIsSet(ControlMask | AltMask)) ||
-        (ModifierIsSet(ControlMask | AltLangMask))))) {
-      switch (key) {
-	
-      case KEY_BackSpace:
-	xf86ProcessActionEvent(ACTION_TERMINATE, NULL);
-	break;
-
-	/*
-	 * The idea here is to pass the scancode down to a list of
-	 * registered routines. There should be some standard conventions
-	 * for processing certain keys.
-	 */
-      case KEY_KP_Minus:   /* Keypad - */
-	if (down) xf86ProcessActionEvent(ACTION_PREV_MODE, NULL);
-	break;
-	
-      case KEY_KP_Plus:   /* Keypad + */
-	if (down) xf86ProcessActionEvent(ACTION_NEXT_MODE, NULL);
-	break;
-      }
-  }
-  return FALSE;
-}
-
-
 static InputInfoPtr
 KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
 {
@@ -626,7 +593,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   DeviceIntPtr device = pInfo->dev;
   KeyClassRec  *keyc = device->key;
   KbdFeedbackClassRec *kbdfeed = device->kbdfeed;
-  int          specialkey = 0;
 
   Bool        UsePrefix = FALSE;
   KeySym      *keysym;
@@ -669,40 +635,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
      }
   }
 
-  /*
-   * and now get some special keysequences
-   */
-
-  specialkey = scanCode;
-
-  if (pKbd->GetSpecialKey != NULL) {
-     specialkey = pKbd->GetSpecialKey(pInfo, scanCode);
-  } else {
-     if (pKbd->specialMap != NULL) {
-         TransMapPtr map = pKbd->specialMap; 
-         if (scanCode >= map->begin && scanCode < map->end)
-             specialkey = map->map[scanCode - map->begin];
-     }
-  }
-
-#ifndef TERMINATE_FALLBACK
-#define TERMINATE_FALLBACK 0
-#endif
-#ifdef XKB
-  if (noXkbExtension
-#if TERMINATE_FALLBACK
-      || specialkey == KEY_BackSpace
-#endif
-     )
-#endif
-  {    
-      if (CommonSpecialKey(specialkey, down, keyc->state))
-	  return;
-      if (pKbd->SpecialKey != NULL)
-	  if (pKbd->SpecialKey(pInfo, specialkey, down, keyc->state))
-	      return;
-  }
-  
 #ifndef __sparc64__
   /*
    * PC keyboards generate separate key codes for

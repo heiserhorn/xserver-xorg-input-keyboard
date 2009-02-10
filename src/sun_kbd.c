@@ -420,8 +420,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->KbdGetMapping = KbdGetMapping;
 
     pKbd->RemapScanCode = NULL;
-    pKbd->GetSpecialKey = NULL;
-    pKbd->SpecialKey    = NULL;
 
     pKbd->OpenKeyboard = OpenKeyboard;
 

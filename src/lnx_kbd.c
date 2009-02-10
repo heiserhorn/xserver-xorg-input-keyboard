@@ -302,83 +302,6 @@ KbdOff(InputInfoPtr pInfo, int what)
     return Success;
 }
 
-static int
-GetSpecialKey(InputInfoPtr pInfo, int scanCode)
-{
-  KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-  int specialkey = scanCode;
-
-#if defined (__sparc__)
-  if (pKbd->sunKbd) {
-      switch (scanCode) {
-          case 0x2b: specialkey = KEY_BackSpace; break;
-          case 0x47: specialkey = KEY_KP_Minus; break;
-          case 0x7d: specialkey = KEY_KP_Plus; break;
-          /* XXX needs cases for KEY_KP_Divide and KEY_KP_Multiply */
-          case 0x05: specialkey = KEY_F1; break;
-          case 0x06: specialkey = KEY_F2; break;
-          case 0x08: specialkey = KEY_F3; break;
-          case 0x0a: specialkey = KEY_F4; break;
-          case 0x0c: specialkey = KEY_F5; break;
-          case 0x0e: specialkey = KEY_F6; break;
-          case 0x10: specialkey = KEY_F7; break;
-          case 0x11: specialkey = KEY_F8; break;
-          case 0x12: specialkey = KEY_F9; break;
-          case 0x07: specialkey = KEY_F10; break;
-          case 0x09: specialkey = KEY_F11; break;
-          case 0x0b: specialkey = KEY_F12; break;
-          default: specialkey = 0; break;
-      }
-      return specialkey;
-  }
-#endif
-
-  if (pKbd->CustomKeycodes) {
-      specialkey = pKbd->specialMap->map[scanCode];
-  }
-  return specialkey;
-}
-
-#define ModifierSet(k) ((modifiers & (k)) == (k))
-
-static
-Bool SpecialKey(InputInfoPtr pInfo, int key, Bool down, int modifiers)
-{
-  KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-
-  if(!pKbd->vtSwitchSupported)
-      return FALSE;
-
-  if ((ModifierSet(ControlMask | AltMask)) ||
-      (ModifierSet(ControlMask | AltLangMask))) {
-      if (VTSwitchEnabled && !xf86Info.vtSysreq && !xf86Info.dontVTSwitch) {
-          switch (key) {
-             case KEY_F1:
-             case KEY_F2:
-             case KEY_F3:
-             case KEY_F4:
-             case KEY_F5:
-             case KEY_F6:
-             case KEY_F7:
-             case KEY_F8:
-             case KEY_F9:
-             case KEY_F10:
-                  if (down) {
-                    ioctl(xf86Info.consoleFd, VT_ACTIVATE, key - KEY_F1 + 1);
-                    return TRUE;
-                  }
-             case KEY_F11:
-             case KEY_F12:
-                  if (down) {
-                    ioctl(xf86Info.consoleFd, VT_ACTIVATE, key - KEY_F11 + 11);
-                    return TRUE;
-                  }
-         }
-      }
-  }
-    return FALSE;
-} 
-
 static void
 stdReadInput(InputInfoPtr pInfo)
 {
@@ -455,10 +378,8 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->GetLeds       = GetKbdLeds;
     pKbd->SetKbdRepeat  = SetKbdRepeat;
     pKbd->KbdGetMapping = KbdGetMapping;
-    pKbd->SpecialKey    = SpecialKey;
 
     pKbd->RemapScanCode = NULL;
-    pKbd->GetSpecialKey = GetSpecialKey;
 
     pKbd->OpenKeyboard = OpenKeyboard;
     pKbd->vtSwitchSupported = FALSE;
