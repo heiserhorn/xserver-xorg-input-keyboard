@@ -532,7 +532,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   KbdDevPtr    pKbd = (KbdDevPtr) pInfo->private;
   DeviceIntPtr device = pInfo->dev;
   KeyClassRec  *keyc = device->key;
-  KbdFeedbackClassRec *kbdfeed = device->kbdfeed;
   KeySym      *keysym;
   int         keycode;
 
@@ -580,19 +579,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   keysym = (keyc->curKeySyms.map +
 	    keyc->curKeySyms.mapWidth * 
 	    (keycode - keyc->curKeySyms.minKeyCode));
-
-  /*
-   * check for an autorepeat-event
-   */
-  if (down && KeyPressed(keycode)) {
-      int num = keycode >> 3;
-      int bit = 1 << (keycode & 7);
-
-      if ((pKbd->autoRepeat != AutoRepeatModeOn) ||
-	  keyc->modifierMap[keycode] ||
-	  !(kbdfeed->ctrl.autoRepeats[num] & bit))
-	  return;
-  }
 
   xf86PostKeyboardEvent(device, keycode, down);
 }
