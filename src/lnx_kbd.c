@@ -57,17 +57,6 @@ SetKbdLeds(InputInfoPtr pInfo, int leds)
 {
     int real_leds = 0;
 
-#if defined (__sparc__)
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    if (pKbd->sunKbd) {
-  	if (leds & 0x08) real_leds |= XLED1;
-  	if (leds & 0x04) real_leds |= XLED3;
-  	if (leds & 0x02) real_leds |= XLED4;
-  	if (leds & 0x01) real_leds |= XLED2;
-        leds = real_leds;
-        real_leds = 0;
-    }
-#endif /* defined (__sparc__) */
 #ifdef LED_CAP
     if (leds & XLED1)  real_leds |= LED_CAP;
     if (leds & XLED2)  real_leds |= LED_NUM;
