@@ -546,11 +546,6 @@ xf86KbdPlug(pointer	module,
 	    int		*errmaj,
 	    int		*errmin)
 {
-    static Bool Initialised = FALSE;
-
-    if (!Initialised)
-	Initialised = TRUE;
-
     xf86AddInputDriver(&KBD, module, 0);
 
     return module;
