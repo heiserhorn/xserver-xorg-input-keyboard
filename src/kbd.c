@@ -424,7 +424,14 @@ KbdProc(DeviceIntPtr device, int what)
              rmlvo.variant = xkb_variant;
              rmlvo.options = xkb_options;
 
-             InitKeyboardDeviceStruct(device, &rmlvo, KbdBell, KbdCtrl);
+             if (!InitKeyboardDeviceStruct(device, &rmlvo, KbdBell, KbdCtrl))
+             {
+                 xf86Msg(X_ERROR, "%s: Keyboard initialization failed. This "
+                         "could be a missing or incorrect setup of "
+                         "xkeyboard-config.\n", device->name);
+
+                 return BadValue;
+             }
          }
 #else
          {
