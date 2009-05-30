@@ -153,13 +153,6 @@ static char *xkb_layout;
 static char *xkb_variant;
 static char *xkb_options;
 
-/*ARGSUSED*/
-static const OptionInfoRec *
-KeyboardAvailableOptions(void *unused)
-{
-    return (KeyboardOptions);
-}
-
 static void
 SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
 {
@@ -533,14 +526,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
 
   xf86PostKeyboardEvent(device, scanCode + MIN_KEYCODE, down);
 }
-
-ModuleInfoRec KbdInfo = {
-    1,
-    "KBD",
-    NULL,
-    0,
-    KeyboardAvailableOptions,
-};
 
 static void
 xf86KbdUnplug(pointer	p)
