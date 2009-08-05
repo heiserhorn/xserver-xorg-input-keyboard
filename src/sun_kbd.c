@@ -65,6 +65,7 @@
 #include <sys/kbd.h>
 
 static int KbdOn(InputInfoPtr pInfo, int what);
+static void CloseKeyboard(InputInfoPtr pInfo);
 
 static void
 sunKbdSetLeds(InputInfoPtr pInfo, int leds)
@@ -236,6 +237,11 @@ KbdOff(InputInfoPtr pInfo, int what)
 
     int i;
 
+    if (priv->remove_timer) {
+	TimerFree(priv->remove_timer);
+	priv->remove_timer = NULL;
+    }
+
     if (!priv->kbdActive) {
 	return Success;
     }
@@ -243,11 +249,6 @@ KbdOff(InputInfoPtr pInfo, int what)
     if (pInfo->fd == -1) {
 	priv->kbdActive = FALSE;
 	return Success;
-    }
-
-    if (priv->remove_timer) {
-	TimerFree(priv->remove_timer);
-	priv->remove_timer = NULL;
     }
 
     /* restore original state */
@@ -288,7 +289,7 @@ KbdOff(InputInfoPtr pInfo, int what)
 	}
     }
 
-    priv->kbdActive = FALSE;
+    CloseKeyboard(pInfo);
     return Success;
 }
 
@@ -385,6 +386,17 @@ SetKbdRepeat(InputInfoPtr pInfo, char rad)
     /* Nothing to do */
 }
 
+static void
+CloseKeyboard(InputInfoPtr pInfo)
+{
+    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
+    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
+
+    close(pInfo->fd);
+    pInfo->fd = -1;
+    priv->kbdActive = FALSE;
+}
+
 /* Called from OsTimer callback, since removing a device from the device
    list or changing pInfo->fd while xf86Wakeup is looping through the list
    causes server crashes */
@@ -392,13 +404,8 @@ static CARD32
 RemoveKeyboard(OsTimerPtr timer, CARD32 time, pointer arg)
 {
     InputInfoPtr pInfo = (InputInfoPtr) arg;
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
-    close(pInfo->fd);
-    pInfo->fd = -1;
-    priv->kbdActive = FALSE;
-
+    CloseKeyboard(pInfo);
     xf86DisableDevice(pInfo->dev, TRUE);
 
     return 0;  /* All done, don't set to run again */
