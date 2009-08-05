@@ -65,6 +65,7 @@
 #include <sys/kbd.h>
 
 static int KbdOn(InputInfoPtr pInfo, int what);
+static Bool OpenKeyboard(InputInfoPtr pInfo);
 static void CloseKeyboard(InputInfoPtr pInfo);
 
 static void
@@ -170,6 +171,12 @@ KbdOn(InputInfoPtr pInfo, int what)
 
     if (priv->kbdActive) {
 	return Success;
+    }
+
+    if (pInfo->fd == -1) {
+	if (!OpenKeyboard(pInfo)) {
+	    return BadImplementation;
+	}
     }
 
     if (priv->strmod) {
