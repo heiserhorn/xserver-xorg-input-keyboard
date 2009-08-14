@@ -63,6 +63,8 @@
 #include <sys/stropts.h>
 #include <sys/vuid_event.h>
 #include <sys/kbd.h>
+#include <sys/note.h>	/* needed before including older versions of hid.h */
+#include <sys/usb/clients/hid/hid.h>
 
 static int KbdOn(InputInfoPtr pInfo, int what);
 static Bool OpenKeyboard(InputInfoPtr pInfo);
@@ -168,6 +170,8 @@ KbdOn(InputInfoPtr pInfo, int what)
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
     int	ktrans, kdirect, i;
+    int io_get_direct = KIOCGDIRECT;
+    int io_set_direct = KIOCSDIRECT;
 
     if (priv->kbdActive) {
 	return Success;
@@ -186,9 +190,15 @@ KbdOn(InputInfoPtr pInfo, int what)
 		    "%s: cannot push module '%s' onto keyboard device: %s\n",
 		    pInfo->name, priv->strmod, strerror(errno));
 	}
+#ifdef HIDIOCKMSDIRECT
+	if (strcmp(priv->strmod, "usbkbm") == 0) {
+	    io_get_direct = HIDIOCKMGDIRECT;
+	    io_set_direct = HIDIOCKMSDIRECT;
+	}
+#endif
     }
 
-    SYSCALL(i = ioctl(pInfo->fd, KIOCGDIRECT, &kdirect));
+    SYSCALL(i = ioctl(pInfo->fd, io_get_direct, &kdirect));
     if (i < 0) {
 	xf86Msg(X_ERROR, 
 		"%s: Unable to determine keyboard direct setting: %s\n", 
@@ -199,7 +209,7 @@ KbdOn(InputInfoPtr pInfo, int what)
     priv->odirect = kdirect;
     kdirect = 1;
 
-    SYSCALL(i = ioctl(pInfo->fd, KIOCSDIRECT, &kdirect));
+    SYSCALL(i = ioctl(pInfo->fd, io_set_direct, &kdirect));
     if (i < 0) {
 	xf86Msg(X_ERROR, "%s: Failed turning keyboard direct mode on: %s\n",
 			pInfo->name, strerror(errno));
@@ -243,6 +253,7 @@ KbdOff(InputInfoPtr pInfo, int what)
     sunKbdPrivPtr priv = (sunKbdPrivPtr) pKbd->private;
 
     int i;
+    int io_set_direct, kdirect;
 
     if (priv->remove_timer) {
 	TimerFree(priv->remove_timer);
@@ -276,8 +287,18 @@ KbdOff(InputInfoPtr pInfo, int what)
 	priv->otranslation = -1;
     }
 
-    if (priv->odirect != -1) {
-        SYSCALL(i = ioctl(pInfo->fd, KIOCSDIRECT, &priv->odirect));
+    io_set_direct = KIOCSDIRECT;
+    kdirect = priv->odirect;
+
+#ifdef HIDIOCKMSDIRECT
+    if ((priv->strmod != NULL) && (strcmp(priv->strmod, "usbkbm") == 0)) {
+	io_set_direct = HIDIOCKMSDIRECT;
+	kdirect = 0;
+    }
+#endif
+
+    if (kdirect != -1) {
+	SYSCALL(i = ioctl(pInfo->fd, io_set_direct, &kdirect));
 	if (i < 0) {
 	    xf86Msg(X_ERROR,
 		    "%s: Unable to restore keyboard direct setting: %s\n",
