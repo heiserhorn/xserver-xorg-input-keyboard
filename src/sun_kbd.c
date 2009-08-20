@@ -184,12 +184,18 @@ KbdOn(InputInfoPtr pInfo, int what)
     }
 
     if (priv->strmod) {
-	SYSCALL(i = ioctl(pInfo->fd, I_PUSH, priv->strmod));
-	if (i < 0) {
-	    xf86Msg(X_ERROR,
-		    "%s: cannot push module '%s' onto keyboard device: %s\n",
-		    pInfo->name, priv->strmod, strerror(errno));
+	/* Check to see if module is already pushed */
+	SYSCALL(i = ioctl(pInfo->fd, I_FIND, priv->strmod));
+
+	if (i == 0) { /* Not already pushed */
+	    SYSCALL(i = ioctl(pInfo->fd, I_PUSH, priv->strmod));
+	    if (i < 0) {
+		xf86Msg(X_ERROR, "%s: cannot push module '%s' onto "
+			"keyboard device: %s\n",
+			pInfo->name, priv->strmod, strerror(errno));
+	    }
 	}
+
 #ifdef HIDIOCKMSDIRECT
 	if (strcmp(priv->strmod, "usbkbm") == 0) {
 	    io_get_direct = HIDIOCKMGDIRECT;
