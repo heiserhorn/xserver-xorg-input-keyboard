@@ -1,6 +1,8 @@
 xserver-xorg-input-keyboard (1:1.3.2-4) UNRELEASED; urgency=low
 
   * Add README.source, bump Standards-Version to 3.8.3.
+  * Install fdi file to pick up the kbd driver on kfreebsd (closes: #541140).
+    Thanks, Aurélien Jarno!
 
  -- Julien Cristau <jcristau@debian.org>  Sat, 22 Aug 2009 22:27:01 +0200
 
