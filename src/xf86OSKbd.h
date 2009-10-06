@@ -69,7 +69,6 @@ typedef struct {
 
     int			bell_pitch;
     int			bell_duration;
-    Bool		autoRepeat;
     unsigned long	leds;
     unsigned long	xledsMask;
     unsigned long	keyLeds;

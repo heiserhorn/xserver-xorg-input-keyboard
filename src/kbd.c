@@ -307,7 +307,6 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
    leds = ctrl->leds & ~(XCAPS | XNUM | XSCR); /* ??? */
    pKbd->leds = leds;
   pKbd->SetLeds(pInfo, pKbd->leds);
-  pKbd->autoRepeat = ctrl->autoRepeat;
 }
 
 static void
