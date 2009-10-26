@@ -29,6 +29,7 @@ AC_INIT([xf86-input-keyboard],
 # Require xorg-macros version 1.3 or newer for XORG_DEFAULT_OPTIONS
 m4_ifndef([XORG_MACROS_VERSION], [AC_FATAL([must install xorg-macros 1.3 or later before running autoconf/autogen])])
 XORG_MACROS_VERSION(1.3)
+XORG_DEFAULT_OPTIONS
 
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_AUX_DIR(.)
@@ -111,7 +112,6 @@ XORG_DRIVER_CHECK_EXT(XKB, kbproto)
 PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto $REQUIRED_MODULES)
 sdkdir=$(pkg-config --variable=sdkdir xorg-server)
 
-XORG_DEFAULT_OPTIONS
 XORG_CFLAGS="$CWARNFLAGS $XORG_CFLAGS"
 AC_SUBST([XORG_CFLAGS])
 
