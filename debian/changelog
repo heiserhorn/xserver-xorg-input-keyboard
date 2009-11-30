@@ -1,6 +1,7 @@
 xserver-xorg-input-keyboard (1:1.4.0-1) UNRELEASED; urgency=low
 
   * New upstream release.
+  * Bump the build-dep on xutils-dev (>= 1:7.5~1).
 
  -- Timo Aaltonen <tjaalton@ubuntu.com>  Mon, 30 Nov 2009 15:26:50 +0200
 
