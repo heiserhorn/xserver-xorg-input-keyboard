@@ -1,8 +1,13 @@
 xserver-xorg-input-keyboard (1:1.4.0-1) UNRELEASED; urgency=low
 
+  [ Timo Aaltonen ]
   * New upstream release.
   * Bump the build-dep on xutils-dev (>= 1:7.5~1).
   * Build against Xserver 1.7.
+
+  [ Julien Cristau ]
+  * Rename the build directory to not include DEB_BUILD_GNU_TYPE for no
+    good reason.  Thanks, Colin Watson!
 
  -- Timo Aaltonen <tjaalton@ubuntu.com>  Sat, 05 Dec 2009 01:49:03 +0200
 
