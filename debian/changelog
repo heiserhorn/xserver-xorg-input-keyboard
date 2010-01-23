@@ -8,6 +8,7 @@ xserver-xorg-input-keyboard (1:1.4.0-1) UNRELEASED; urgency=low
   [ Julien Cristau ]
   * Rename the build directory to not include DEB_BUILD_GNU_TYPE for no
     good reason.  Thanks, Colin Watson!
+  * Remove myself from Uploaders
 
  -- Timo Aaltonen <tjaalton@ubuntu.com>  Sat, 05 Dec 2009 01:49:03 +0200
 
