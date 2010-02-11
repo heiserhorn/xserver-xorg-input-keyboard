@@ -112,9 +112,6 @@ XORG_DRIVER_CHECK_EXT(XKB, kbproto)
 # Checks for pkg-config packages
 PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto $REQUIRED_MODULES)
 
-XORG_CFLAGS="$CWARNFLAGS $XORG_CFLAGS"
-AC_SUBST([XORG_CFLAGS])
-
 # Checks for libraries.
 
 # Checks for header files.
