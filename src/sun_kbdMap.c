@@ -25,6 +25,7 @@
 #include "config.h"
 #endif
 
+#include <xorg-server.h>
 #include <X11/Xfuncproto.h>
 #include <X11/Sunkeysym.h>
 #include "atKeynames.h"
