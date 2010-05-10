@@ -82,7 +82,6 @@ AC_ARG_WITH(xorg-module-dir,
 AC_SUBST(moduledir)
 
 # Checks for extensions
-XORG_DRIVER_CHECK_EXT(RANDR, randrproto)
 XORG_DRIVER_CHECK_EXT(XINPUT, inputproto)
 
 # Checks for pkg-config packages
