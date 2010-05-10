@@ -29,10 +29,10 @@ AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(.)
 
-# Require xorg-macros: XORG_DEFAULT_OPTIONS
+# Initialize X.Org macros
 m4_ifndef([XORG_MACROS_VERSION],
-	  [m4_fatal([must install xorg-macros 1.3 or later before running autoconf/autogen])])
-XORG_MACROS_VERSION(1.3)
+          [m4_fatal([must install xorg-macros 1.4 or later before running autoconf/autogen])])
+XORG_MACROS_VERSION(1.4)
 XORG_DEFAULT_OPTIONS
 
 AM_INIT_AUTOMAKE([foreign dist-bzip2])
