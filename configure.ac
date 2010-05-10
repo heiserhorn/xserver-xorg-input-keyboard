@@ -45,7 +45,6 @@ AC_SUBST([DRIVER_NAME])
 # Checks for programs.
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
-AC_PROG_CC
 
 case $host_os in
   linux*)
