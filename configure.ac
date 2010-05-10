@@ -81,11 +81,8 @@ AC_ARG_WITH(xorg-module-dir,
             [moduledir="$libdir/xorg/modules"])
 AC_SUBST(moduledir)
 
-# Checks for extensions
-XORG_DRIVER_CHECK_EXT(XINPUT, inputproto)
-
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto $REQUIRED_MODULES)
+PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto inputproto)
 
 # Checks for libraries.
 
