@@ -93,7 +93,6 @@ AM_CONDITIONAL(LINUX, [test "x$IS_LINUX" = xyes])
 AM_CONDITIONAL(BSD, [test "x$IS_BSD" = xyes])
 AM_CONDITIONAL(SOLARIS, [test "x$IS_SOLARIS" = xyes])
 AM_CONDITIONAL(HURD, [test "x$IS_HURD" = xyes])
-AM_CONDITIONAL(SCO, [test "x$IS_SCO" = xyes])
 
 AC_ARG_WITH(xorg-module-dir,
             AC_HELP_STRING([--with-xorg-module-dir=DIR],
