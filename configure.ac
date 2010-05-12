@@ -86,7 +86,4 @@ PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto inputproto)
 
 # Checks for libraries.
 
-# Checks for header files.
-AC_HEADER_STDC
-
 AC_OUTPUT([Makefile src/Makefile man/Makefile])
