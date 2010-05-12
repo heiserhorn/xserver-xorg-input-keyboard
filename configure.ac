@@ -20,14 +20,23 @@
 #
 # Process this file with autoconf to produce a configure script
 
-AC_PREREQ(2.60)
+# Initialize Autoconf
+AC_PREREQ([2.60])
 AC_INIT([xf86-input-keyboard],
-        1.4.0,
+        [1.4.0],
         [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
-        xf86-input-keyboard)
+        [xf86-input-keyboard])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(.)
+
+# Initialize Automake
+AM_INIT_AUTOMAKE([foreign dist-bzip2])
+AM_MAINTAINER_MODE
+
+# Initialize libtool
+AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
 
 # Initialize X.Org macros
 m4_ifndef([XORG_MACROS_VERSION],
@@ -35,17 +44,22 @@ m4_ifndef([XORG_MACROS_VERSION],
 XORG_MACROS_VERSION(1.4)
 XORG_DEFAULT_OPTIONS
 
-AM_INIT_AUTOMAKE([foreign dist-bzip2])
-
-AM_MAINTAINER_MODE
-
-DRIVER_NAME=kbd
-AC_SUBST([DRIVER_NAME])
-
 # Checks for programs.
-AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+AC_PROG_INSTALL
+AC_PROG_SED
 
+# Obtain compiler/linker options from server and required extensions
+PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto inputproto)
+
+# Define a configure option for an alternate input module directory
+AC_ARG_WITH(xorg-module-dir,
+            AC_HELP_STRING([--with-xorg-module-dir=DIR],
+                           [Default xorg module directory [[default=$libdir/xorg/modules]]]),
+            [moduledir="$withval"],
+            [moduledir="$libdir/xorg/modules"])
+AC_SUBST(moduledir)
+
+# The keyboard driver code is O/S specific
 case $host_os in
   linux*)
     IS_LINUX="yes"
@@ -74,16 +88,10 @@ AM_CONDITIONAL(BSD, [test "x$IS_BSD" = xyes])
 AM_CONDITIONAL(SOLARIS, [test "x$IS_SOLARIS" = xyes])
 AM_CONDITIONAL(HURD, [test "x$IS_HURD" = xyes])
 
-AC_ARG_WITH(xorg-module-dir,
-            AC_HELP_STRING([--with-xorg-module-dir=DIR],
-                           [Default xorg module directory [[default=$libdir/xorg/modules]]]),
-            [moduledir="$withval"],
-            [moduledir="$libdir/xorg/modules"])
-AC_SUBST(moduledir)
+DRIVER_NAME=kbd
+AC_SUBST([DRIVER_NAME])
 
-# Checks for pkg-config packages
-PKG_CHECK_MODULES(XORG, [xorg-server >= 1.2.99.0] xproto inputproto)
-
-# Checks for libraries.
-
-AC_OUTPUT([Makefile src/Makefile man/Makefile])
+AC_CONFIG_FILES([Makefile
+                 src/Makefile
+                 man/Makefile])
+AC_OUTPUT
