@@ -6,7 +6,7 @@ Uploaders: David Nusinow <dnusinow@debian.org>, Drew Parsons <dparsons@debian.or
 Build-Depends:
  debhelper (>= 5),
  pkg-config,
- xserver-xorg-dev (>= 2:1.7),
+ xserver-xorg-dev (>= 2:1.7.6.901),
  x11proto-kb-dev,
  x11proto-input-dev,
  x11proto-core-dev,
@@ -22,7 +22,7 @@ Vcs-Browser: http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-input-keyboar
 
 Package: xserver-xorg-input-kbd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${xserver:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${xinpdriver:Depends}
 Provides: ${xinpdriver:Provides}
 Replaces: xserver-xorg (<< 6.8.2-35)
 Description: X.Org X server -- keyboard input driver

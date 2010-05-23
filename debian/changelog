@@ -3,6 +3,7 @@ xserver-xorg-input-keyboard (1:1.4.0-2) UNRELEASED; urgency=low
   * Rename the build directory to not include DEB_BUILD_GNU_TYPE for no
     good reason.  Thanks, Colin Watson!
   * Remove myself from Uploaders
+  * Update xsfbs, use new ${xinpdriver:Depends} substvar.
 
  -- Julien Cristau <jcristau@debian.org>  Sat, 23 Jan 2010 02:10:22 +0100
 
