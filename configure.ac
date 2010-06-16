@@ -53,7 +53,8 @@ AC_ARG_WITH(xorg-module-dir,
                            [Default xorg module directory [[default=$libdir/xorg/modules]]]),
             [moduledir="$withval"],
             [moduledir="$libdir/xorg/modules"])
-AC_SUBST(moduledir)
+inputdir=${moduledir}/input
+AC_SUBST(inputdir)
 
 # The keyboard driver code is O/S specific
 case $host_os in

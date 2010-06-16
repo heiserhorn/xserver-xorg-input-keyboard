@@ -23,7 +23,7 @@ AM_CFLAGS = $(XORG_CFLAGS) $(CWARNFLAGS)
 kbd_drv_la_LTLIBRARIES = kbd_drv.la
 kbd_drv_la_LDFLAGS = -avoid-version -module
 kbd_drv_la_SOURCES = kbd.c xf86OSKbd.h xf86Keymap.h atKeynames.h
-kbd_drv_ladir = @moduledir@/input
+kbd_drv_ladir = @inputdir@
 
 BSD_SRCS = bsd_KbdMap.c bsd_kbd.c bsd_kbd.h at_scancode.c
 HURD_SRCS = hurd_kbd.c at_scancode.c
