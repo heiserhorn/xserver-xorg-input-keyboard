@@ -85,7 +85,6 @@ static const char *kbdDefaults[] = {
 #else
     "Protocol",		"standard",
 #endif
-    "AutoRepeat",	"500 30",
     "XkbRules",		"base",
     "XkbModel",		"pc105",
     "XkbLayout",	"us",
@@ -99,7 +98,6 @@ static const char *kbd98Defaults[] = {
 #else
     "Protocol",		"standard",
 #endif
-    "AutoRepeat",	"500 30",
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
     "XkbLayout",	"jp",
