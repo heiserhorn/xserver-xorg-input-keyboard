@@ -22,7 +22,6 @@
  */
 /* $XFree86: xc/programs/Xserver/hw/xfree86/os-support/hurd/hurd_io.c,v 1.8 2002/10/11 01:40:35 dawes Exp $ */
 
-#define NEED_EVENTS
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

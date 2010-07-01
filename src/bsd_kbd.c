@@ -8,8 +8,6 @@
  * Copyright 1993 by David Dawes <dawes@xfree86.org>
  */
 
-#define NEED_EVENTS
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
