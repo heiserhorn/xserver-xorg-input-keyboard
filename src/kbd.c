@@ -79,40 +79,6 @@ _X_EXPORT InputDriverRec KEYBOARD = {
 	0
 };
 
-typedef enum {
-    OPTION_ALWAYS_CORE,
-    OPTION_SEND_CORE_EVENTS,
-    OPTION_CORE_KEYBOARD,
-    OPTION_DEVICE,
-    OPTION_PROTOCOL,
-    OPTION_AUTOREPEAT,
-    OPTION_XLEDS,
-    OPTION_XKB_RULES,
-    OPTION_XKB_MODEL,
-    OPTION_XKB_LAYOUT,
-    OPTION_XKB_VARIANT,
-    OPTION_XKB_OPTIONS,
-    OPTION_CUSTOM_KEYCODES
-} KeyboardOpts;
-
-/* These aren't actually used ... */
-static const OptionInfoRec KeyboardOptions[] = {
-    { OPTION_ALWAYS_CORE,	"AlwaysCore",	  OPTV_BOOLEAN,	{0}, FALSE },
-    { OPTION_SEND_CORE_EVENTS,	"SendCoreEvents", OPTV_BOOLEAN,	{0}, FALSE },
-    { OPTION_CORE_KEYBOARD,	"CoreKeyboard",	  OPTV_BOOLEAN,	{0}, FALSE },
-    { OPTION_DEVICE,		"Device",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_PROTOCOL,		"Protocol",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_AUTOREPEAT,	"AutoRepeat",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XLEDS,		"XLeds",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_RULES,		"XkbRules",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_MODEL,		"XkbModel",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_LAYOUT,	"XkbLayout",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_VARIANT,	"XkbVariant",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_XKB_OPTIONS,	"XkbOptions",	  OPTV_STRING,	{0}, FALSE },
-    { OPTION_CUSTOM_KEYCODES,   "CustomKeycodes", OPTV_BOOLEAN,	{0}, FALSE },
-    { -1,			NULL,		  OPTV_NONE,	{0}, FALSE }
-};
-
 static const char *kbdDefaults[] = {
 #ifdef XQUEUE 
     "Protocol",		"Xqueue",
