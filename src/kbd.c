@@ -430,14 +430,6 @@ KbdProc(DeviceIntPtr device, int what)
       RemoveEnabledDevice(pInfo->fd);
     pKbd->KbdOff(pInfo, what);
     device->public.on = FALSE;
-
-    if (what == DEVICE_CLOSE) {
-	xf86Msg(X_INFO, "%s: Close\n", pInfo->name);
-	if (pInfo->fd != -1) {
-	    close(pInfo->fd);
-	    pInfo->fd = -1;
-	}
-    }
     break;
   }
   return (Success);
