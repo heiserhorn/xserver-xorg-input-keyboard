@@ -1,5 +1,3 @@
-/* $XFree86$ */
-
 /*
  * Slightly modified xf86KbdBSD.c which is
  *
