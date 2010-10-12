@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.4.0-3) UNRELEASED; urgency=low
+
+  * Build against Xserver 1.9.1 rc1.
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 13 Oct 2010 01:04:54 +0200
+
 xserver-xorg-input-keyboard (1:1.4.0-2) unstable; urgency=medium
 
   * Rename the build directory to not include DEB_BUILD_GNU_TYPE for no
