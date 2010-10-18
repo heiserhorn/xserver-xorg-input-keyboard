@@ -65,8 +65,7 @@ _X_EXPORT InputDriverRec KBD = {
 	NULL,
 	KbdPreInit,
 	NULL,
-	NULL,
-	0
+	NULL
 };
 
 _X_EXPORT InputDriverRec KEYBOARD = {
@@ -75,8 +74,7 @@ _X_EXPORT InputDriverRec KEYBOARD = {
 	NULL,
 	KbdPreInit,
 	NULL,
-	NULL,
-	0
+	NULL
 };
 
 static const char *kbdDefaults[] = {
