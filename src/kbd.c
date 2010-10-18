@@ -118,7 +118,7 @@ SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
 
    if ((s = xf86SetStrOption(pInfo->options, name, NULL))) {
        if (!s[0]) {
-           xfree(s);
+           free(s);
            *option = NULL;
        } else {
            *option = s;
@@ -165,7 +165,7 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
         xf86CollectInputOptions(pInfo, kbd98Defaults, NULL);
     xf86ProcessCommonOptions(pInfo, pInfo->options); 
 
-    if (!(pKbd = xcalloc(sizeof(KbdDevRec), 1)))
+    if (!(pKbd = calloc(sizeof(KbdDevRec), 1)))
         return pInfo;
 
     pInfo->private = pKbd;
@@ -191,7 +191,7 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
     	    }
     	    l = strtok(NULL, " \t\n");
         }
-        xfree(s);
+        free(s);
     }
 
     SetXkbOption(pInfo, "XkbRules", &xkb_rules);
