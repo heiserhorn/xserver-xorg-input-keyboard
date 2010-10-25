@@ -49,7 +49,11 @@
 /* Used to know when the first DEVICE_ON after a DEVICE_INIT is called */
 #define INITFLAG	(1U << 31)
 
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
 static InputInfoPtr KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags);
+#else
+static int KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags);
+#endif
 static int KbdProc(DeviceIntPtr device, int what);
 static void KbdCtrl(DeviceIntPtr device, KeybdCtrl *ctrl);
 static void KbdBell(int percent, DeviceIntPtr dev, pointer ctrl, int unused);
@@ -125,21 +129,52 @@ SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
     }
 }
 
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
+static int
+NewKbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags);
+
 static InputInfoPtr
 KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
 {
     InputInfoPtr pInfo;
-    KbdDevPtr pKbd;
-    MessageType from = X_DEFAULT;
-    char *s;
 
     if (!(pInfo = xf86AllocateInput(drv, 0)))
 	return NULL;
 
-    /* Initialise the InputInfoRec. */
     pInfo->name = dev->identifier;
-    pInfo->type_name = XI_KEYBOARD;
     pInfo->flags = XI86_KEYBOARD_CAPABLE;
+    pInfo->conversion_proc = NULL;
+    pInfo->reverse_conversion_proc = NULL;
+    pInfo->private_flags = 0;
+    pInfo->always_core_feedback = NULL;
+    pInfo->conf_idev = dev;
+    pInfo->close_proc = NULL;
+
+    if (NewKbdPreInit(drv, pInfo, flags) == Success)
+    {
+        pInfo->flags |= XI86_CONFIGURED;
+        return pInfo;
+    }
+
+    xf86DeleteInput(pInfo, 0);
+    return NULL;
+}
+
+static int
+NewKbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+#else
+static int
+KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
+#endif
+{
+    KbdDevPtr pKbd;
+    MessageType from = X_DEFAULT;
+    char *s;
+    const char **defaults;
+    int rc = Success;
+
+    /* Initialise the InputInfoRec. */
+    pInfo->type_name = XI_KEYBOARD;
     pInfo->device_control = KbdProc;
     /*
      * We don't specify our own read_input function. We expect
@@ -147,33 +182,37 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
      */
     pInfo->read_input = NULL;
     pInfo->control_proc = NULL;
-    pInfo->close_proc = NULL;
     pInfo->switch_mode = NULL;
-    pInfo->conversion_proc = NULL;
-    pInfo->reverse_conversion_proc = NULL;
     pInfo->fd = -1;
     pInfo->dev = NULL;
-    pInfo->private_flags = 0;
-    pInfo->always_core_feedback = NULL;
-    pInfo->conf_idev = dev;
 
     if (!xf86IsPc98())
-        xf86CollectInputOptions(pInfo, kbdDefaults, NULL);
+        defaults = kbdDefaults;
     else
-        xf86CollectInputOptions(pInfo, kbd98Defaults, NULL);
+        defaults = kbd98Defaults;
+    xf86CollectInputOptions(pInfo, kbdDefaults
+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
+            , NULL
+#endif
+            );
     xf86ProcessCommonOptions(pInfo, pInfo->options); 
 
-    if (!(pKbd = calloc(sizeof(KbdDevRec), 1)))
-        return pInfo;
+    if (!(pKbd = calloc(sizeof(KbdDevRec), 1))) {
+        rc = BadAlloc;
+        goto out;
+    }
 
     pInfo->private = pKbd;
     pKbd->PostEvent = PostKbdEvent;
 
-    if (!xf86OSKbdPreInit(pInfo))
-        return pInfo;
+    if (!xf86OSKbdPreInit(pInfo)) {
+        rc = BadAlloc;
+        goto out;
+    }
 
     if (!pKbd->OpenKeyboard(pInfo)) {
-        return pInfo;
+        rc = BadMatch;
+        goto out;
     }
 
     if ((s = xf86SetStrOption(pInfo->options, "XLeds", NULL))) {
@@ -209,9 +248,8 @@ KbdPreInit(InputDriverPtr drv, IDevPtr dev, int flags)
   xf86Msg(from, "%s: CustomKeycodes %s\n",
                pInfo->name, pKbd->CustomKeycodes ? "enabled" : "disabled");
 
-  pInfo->flags |= XI86_CONFIGURED;
-
-  return pInfo;
+out:
+  return rc;
 }
 
 static void
