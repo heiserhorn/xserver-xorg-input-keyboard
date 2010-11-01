@@ -1,8 +1,12 @@
-xserver-xorg-input-keyboard (1:1.4.0-3) experimental; urgency=low
+xserver-xorg-input-keyboard (1:1.5.0-1) experimental; urgency=low
 
+  [ Cyril Brulebois ]
   * Build against Xserver 1.9.1 rc1.
 
- -- Cyril Brulebois <kibi@debian.org>  Wed, 13 Oct 2010 01:05:51 +0200
+  [ Robert Hooker ]
+  * New upstream release.
+
+ -- Robert Hooker <sarvatt@ubuntu.com>  Mon, 01 Nov 2010 14:26:19 -0400
 
 xserver-xorg-input-keyboard (1:1.4.0-2) unstable; urgency=medium
 
