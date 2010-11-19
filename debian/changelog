@@ -7,6 +7,9 @@ xserver-xorg-input-keyboard (1:1.5.0-1) experimental; urgency=low
   * New upstream release.
   * Bump xutils-dev requirement for new util-macros.
 
+  [ Cyril Brulebois ]
+  * Add myself to Uploaders.
+
  -- Robert Hooker <sarvatt@ubuntu.com>  Mon, 01 Nov 2010 14:26:19 -0400
 
 xserver-xorg-input-keyboard (1:1.4.0-2) unstable; urgency=medium
