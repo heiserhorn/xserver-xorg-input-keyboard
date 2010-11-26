@@ -1026,8 +1026,6 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
       break;
 
     }
-  
-  pKbd->kbdType = 0;
 
   pKeySyms->map        = map;
   pKeySyms->mapWidth   = GLYPHS_PER_KEY;

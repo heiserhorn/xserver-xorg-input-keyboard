@@ -97,8 +97,6 @@ KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
       break;
 
     }
-  
-  pKbd->kbdType = ioctl(pInfo->fd, KDGKBTYPE, &type) != -1 ? type : KB_101;
 
   pKeySyms->map        = map;
   pKeySyms->mapWidth   = GLYPHS_PER_KEY;

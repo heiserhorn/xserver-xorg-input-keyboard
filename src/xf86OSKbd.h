@@ -81,7 +81,6 @@ typedef struct {
 
     /* os specific */
     pointer		private;
-    int			kbdType;
     int			consType;
     int			wsKbdType;
 
