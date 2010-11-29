@@ -165,7 +165,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->KbdGetMapping = KbdGetMapping;
     pKbd->RemapScanCode = ATScancode;
     pKbd->OpenKeyboard  = OpenKeyboard;
-    pKbd->vtSwitchSupported = FALSE;
     pKbd->CustomKeycodes = FALSE;
     pKbd->private       = NULL;
     pInfo->read_input   = ReadInput;

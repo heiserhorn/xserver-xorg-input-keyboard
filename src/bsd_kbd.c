@@ -29,8 +29,6 @@
 extern void KbdGetMapping(InputInfoPtr pInfo, KeySymsPtr pKeySyms,
                           CARD8 *pModMap);
 
-extern Bool VTSwitchEnabled;
-
 static KbdProtocolRec protocols[] = {
    {"standard", PROT_STD },
 #ifdef WSCONS_SUPPORT
@@ -406,12 +404,6 @@ OpenKeyboard(InputInfoPtr pInfo)
        xfree(s);
     }
 
-#if defined (SYSCONS_SUPPORT) || defined (PCVT_SUPPORT)
-    if (pKbd->isConsole &&
-        ((pKbd->consType == SYSCONS) || (pKbd->consType == PCVT)))
-        pKbd->vtSwitchSupported = TRUE;
-#endif
-
 #ifdef WSCONS_SUPPORT
     if( prot == PROT_WSCONS) {
        pKbd->consType = WSCONS;
@@ -474,7 +466,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->RemapScanCode = NULL;
 
     pKbd->OpenKeyboard = OpenKeyboard;
-    pKbd->vtSwitchSupported = FALSE;
     pKbd->CustomKeycodes = FALSE;
     
     pKbd->private = xcalloc(sizeof(BsdKbdPrivRec), 1);

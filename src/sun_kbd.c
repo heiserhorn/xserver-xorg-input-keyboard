@@ -538,7 +538,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
 
     pKbd->OpenKeyboard = OpenKeyboard;
 
-    pKbd->vtSwitchSupported = FALSE;
     pKbd->CustomKeycodes = FALSE;
 
     pKbd->private = xcalloc(sizeof(sunKbdPrivRec), 1);

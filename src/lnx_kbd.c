@@ -37,8 +37,6 @@ static KbdProtocolRec protocols[] = {
    { NULL, PROT_UNKNOWN_KBD }
 };
 
-extern Bool VTSwitchEnabled;
-
 static void
 SoundBell(InputInfoPtr pInfo, int loudness, int pitch, int duration)
 {
@@ -203,9 +201,6 @@ OpenKeyboard(InputInfoPtr pInfo)
        free(s);
     }
 
-    if (pKbd->isConsole)
-         pKbd->vtSwitchSupported = TRUE;
-
     return TRUE;
 }
 
@@ -225,7 +220,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->RemapScanCode = NULL;
 
     pKbd->OpenKeyboard = OpenKeyboard;
-    pKbd->vtSwitchSupported = FALSE;
 
     pKbd->private = calloc(sizeof(LnxKbdPrivRec), 1);
     if (pKbd->private == NULL) {

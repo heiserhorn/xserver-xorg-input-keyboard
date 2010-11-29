@@ -73,7 +73,6 @@ typedef struct {
     unsigned long	xledsMask;
     unsigned long	keyLeds;
     int			scanPrefix;
-    Bool		vtSwitchSupported;
     Bool		CustomKeycodes;
     Bool		isConsole;
     TransMapPtr         scancodeMap;
