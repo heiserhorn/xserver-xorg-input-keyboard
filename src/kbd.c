@@ -481,10 +481,6 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   ErrorF("kbd driver rec scancode: 0x02%x %s\n", scanCode, down?"down":"up");
 #endif
 	  
-  /* Disable any keyboard processing while in suspend */
-  if (xf86inSuspend)
-      return;
-
   /*
    * First do some special scancode remapping ...
    */
