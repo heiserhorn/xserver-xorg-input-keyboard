@@ -489,35 +489,23 @@ ReadInput(InputInfoPtr pInfo)
 static Bool
 OpenKeyboard(InputInfoPtr pInfo)
 {
-    const char *kbdPath = NULL;
-    const char *defaultKbd = "/dev/kbd";
-
-    if (pInfo->options != NULL) {
-	kbdPath = xf86SetStrOption(pInfo->options, "Device", NULL);
-    }
-    if (kbdPath == NULL) {
-        kbdPath = defaultKbd;
-    }
+    char *kbdPath = xf86SetStrOption(pInfo->options, "Device", "/dev/kbd");
+    Bool ret;
 
     pInfo->fd = open(kbdPath, O_RDONLY | O_NONBLOCK);
     
     if (pInfo->fd == -1) {
-        xf86Msg(X_ERROR, "%s: cannot open \"%s\"\n", pInfo->name, kbdPath);
+	xf86Msg(X_ERROR, "%s: cannot open \"%s\"\n", pInfo->name, kbdPath);
+	ret = FALSE;
     } else {
 	xf86MsgVerb(X_INFO, 3, "%s: Opened device \"%s\"\n", pInfo->name,
 		    kbdPath);
-    }
-    
-    if ((kbdPath != NULL) && (kbdPath != defaultKbd)) {
-	xfree(kbdPath);
+	pInfo->read_input = ReadInput;
+	ret = TRUE;
     }
 
-    if (pInfo->fd == -1) {
-	return FALSE;
-    } else {
-	pInfo->read_input = ReadInput;
-	return TRUE;
-    }
+    free(kbdPath);
+    return ret;
 }
 
 _X_EXPORT Bool
@@ -540,7 +528,7 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
 
     pKbd->CustomKeycodes = FALSE;
 
-    pKbd->private = xcalloc(sizeof(sunKbdPrivRec), 1);
+    pKbd->private = calloc(sizeof(sunKbdPrivRec), 1);
     if (pKbd->private == NULL) {
        xf86Msg(X_ERROR,"can't allocate keyboard OS private data\n");
        return FALSE;
