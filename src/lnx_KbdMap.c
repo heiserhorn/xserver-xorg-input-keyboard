@@ -39,9 +39,7 @@ static void readKernelMapping(InputInfoPtr pInfo,
 void
 KbdGetMapping (InputInfoPtr pInfo, KeySymsPtr pKeySyms, CARD8 *pModMap)
 {
-  KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
   KeySym        *k;
-  char          type;
   int           i;
 
   readKernelMapping(pInfo, pKeySyms, pModMap);
