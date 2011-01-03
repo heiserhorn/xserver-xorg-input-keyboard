@@ -25,9 +25,7 @@
 #include "xf86Xinput.h"
 #include "xf86OSKbd.h"
 #include "atKeynames.h"
-
-extern void KbdGetMapping(InputInfoPtr pInfo, KeySymsPtr pKeySyms,
-                          CARD8 *pModMap);
+#include "bsd_kbd.h"
 
 static KbdProtocolRec protocols[] = {
    {"standard", PROT_STD },
