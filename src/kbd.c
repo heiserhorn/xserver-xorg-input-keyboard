@@ -60,7 +60,6 @@ static void KbdBell(int percent, DeviceIntPtr dev, pointer ctrl, int unused);
 static void PostKbdEvent(InputInfoPtr pInfo, unsigned int key, Bool down);
 
 static void InitKBD(InputInfoPtr pInfo, Bool init);
-static void SetXkbOption(InputInfoPtr pInfo, char *name, char **option);
 static void UpdateLeds(InputInfoPtr pInfo);
 
 _X_EXPORT InputDriverRec KBD = {
@@ -112,22 +111,6 @@ static char *xkb_model;
 static char *xkb_layout;
 static char *xkb_variant;
 static char *xkb_options;
-
-static void
-SetXkbOption(InputInfoPtr pInfo, char *name, char **option)
-{
-   char *s;
-
-   if ((s = xf86SetStrOption(pInfo->options, name, NULL))) {
-       if (!s[0]) {
-           free(s);
-           *option = NULL;
-       } else {
-           *option = s;
-           xf86Msg(X_CONFIG, "%s: %s: \"%s\"\n", pInfo->name, name, s);
-       }
-    }
-}
 
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
 static int
@@ -231,11 +214,11 @@ KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
         free(s);
     }
 
-    SetXkbOption(pInfo, "XkbRules", &xkb_rules);
-    SetXkbOption(pInfo, "XkbModel", &xkb_model);
-    SetXkbOption(pInfo, "XkbLayout", &xkb_layout);
-    SetXkbOption(pInfo, "XkbVariant", &xkb_variant);
-    SetXkbOption(pInfo, "XkbOptions", &xkb_options);
+    xkb_rules = xf86SetStrOption(pInfo->options, "XkbRules", NULL);
+    xkb_model = xf86SetStrOption(pInfo->options, "XkbModel", NULL);
+    xkb_layout = xf86SetStrOption(pInfo->options, "XkbLayout", NULL);
+    xkb_variant = xf86SetStrOption(pInfo->options, "XkbVariant", NULL);
+    xkb_options = xf86SetStrOption(pInfo->options, "XkbOptions", NULL);
 
   pKbd->CustomKeycodes = FALSE;
   from = X_DEFAULT; 
