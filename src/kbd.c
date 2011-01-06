@@ -190,7 +190,7 @@ KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
         defaults = kbdDefaults;
     else
         defaults = kbd98Defaults;
-    xf86CollectInputOptions(pInfo, kbdDefaults
+    xf86CollectInputOptions(pInfo, defaults
 #if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 12
             , NULL
 #endif
