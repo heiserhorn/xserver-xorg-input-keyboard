@@ -409,13 +409,6 @@ GetKbdLeds(InputInfoPtr pInfo)
     return leds;
 }
 
-/* ARGSUSED0 */
-static void
-SetKbdRepeat(InputInfoPtr pInfo, char rad)
-{
-    /* Nothing to do */
-}
-
 static void
 CloseKeyboard(InputInfoPtr pInfo)
 {
@@ -519,7 +512,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->Bell          = SoundKbdBell;
     pKbd->SetLeds       = SetKbdLeds;
     pKbd->GetLeds       = GetKbdLeds;
-    pKbd->SetKbdRepeat  = SetKbdRepeat;
     pKbd->KbdGetMapping = KbdGetMapping;
 
     pKbd->RemapScanCode = NULL;

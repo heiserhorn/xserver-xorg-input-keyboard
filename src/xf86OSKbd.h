@@ -40,7 +40,6 @@ typedef	void	(*BellProc)(InputInfoPtr pInfo,
                             int loudness, int pitch, int duration);
 typedef	void	(*SetLedsProc)(InputInfoPtr pInfo, int leds);
 typedef	int	(*GetLedsProc)(InputInfoPtr pInfo);
-typedef	void	(*SetKbdRepeatProc)(InputInfoPtr pInfo, char rad);
 typedef	void	(*KbdGetMappingProc)(InputInfoPtr pInfo,
                                      KeySymsPtr pKeySyms, CARD8* pModMap);
 typedef	int	(*RemapScanCodeProc)(InputInfoPtr pInfo, int *scanCode);
@@ -60,7 +59,6 @@ typedef struct {
     BellProc		Bell;
     SetLedsProc		SetLeds;
     GetLedsProc		GetLeds;
-    SetKbdRepeatProc	SetKbdRepeat;
     KbdGetMappingProc	KbdGetMapping;
     RemapScanCodeProc	RemapScanCode;
 

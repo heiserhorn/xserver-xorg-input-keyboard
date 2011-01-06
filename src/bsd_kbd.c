@@ -138,25 +138,6 @@ GetKbdLeds(InputInfoPtr pInfo)
     return(leds);
 }
 
-static void
-SetKbdRepeat(InputInfoPtr pInfo, char rad)
-{
-    KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-    switch (pKbd->consType) {
-
-#ifdef PCCONS_SUPPORT
-	case PCCONS:
-		break;
-#endif
-#if defined (SYSCONS_SUPPORT) || defined (PCVT_SUPPORT)
-	case SYSCONS:
-	case PCVT:
-		ioctl(pInfo->fd, KDSETRAD, rad);
-		break;
-#endif
-    }
-}
-
 static int
 KbdOn(InputInfoPtr pInfo, int what)
 {
@@ -458,7 +439,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->Bell		= SoundBell;
     pKbd->SetLeds	= SetKbdLeds;
     pKbd->GetLeds	= GetKbdLeds;
-    pKbd->SetKbdRepeat	= SetKbdRepeat;
     pKbd->KbdGetMapping	= KbdGetMapping;
 
     pKbd->RemapScanCode = NULL;
