@@ -65,8 +65,6 @@ typedef struct {
     OpenKeyboardProc	OpenKeyboard;
     PostEventProc	PostEvent;
 
-    int			bell_pitch;
-    int			bell_duration;
     unsigned long	leds;
     unsigned long	xledsMask;
     unsigned long	keyLeds;
