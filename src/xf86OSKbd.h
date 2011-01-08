@@ -97,21 +97,3 @@ typedef struct {
 } KbdProtocolRec;
 
 Bool xf86OSKbdPreInit(InputInfoPtr pInfo);
-
-/* Adjust this when the kbd interface changes. */
-
-/*
- * History:
- *
- *  1.0.0 - Initial version.
- */
-
-#define OS_KBD_VERSION_MAJOR 1
-#define OS_KBD_VERSION_MINOR 0
-#define OS_KBD_VERSION_PATCH 0
-
-#define OS_KBD_VERSION_CURRENT						\
-	BUILTIN_INTERFACE_VERSION_NUMERIC(OS_KBD_VERSION_MAJOR,		\
-					  OS_KBD_VERSION_MINOR,		\
-					  OS_KBD_VERSION_PATCH)
-
