@@ -354,11 +354,11 @@ OpenKeyboard(InputInfoPtr pInfo)
 #endif
         default:
            xf86Msg(X_ERROR,"\"%s\" is not a valid keyboard protocol name\n", s);
-           xfree(s);
+           free(s);
            return FALSE;
     }
     xf86Msg(X_CONFIG, "%s: Protocol: %s\n", pInfo->name, s);
-    xfree(s);
+    free(s);
 
     s = xf86SetStrOption(pInfo->options, "Device", NULL);
     if (s == NULL) {
@@ -375,12 +375,12 @@ OpenKeyboard(InputInfoPtr pInfo)
 	pInfo->fd = open(s, O_RDONLY | O_NONBLOCK | O_EXCL);
        if (pInfo->fd == -1) {
            xf86Msg(X_ERROR, "%s: cannot open \"%s\"\n", pInfo->name, s);
-           xfree(s);
+           free(s);
            return FALSE;
        }
        pKbd->isConsole = FALSE;
        pKbd->consType = xf86Info.consType;
-       xfree(s);
+       free(s);
     }
 
 #ifdef WSCONS_SUPPORT
@@ -445,8 +445,8 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
 
     pKbd->OpenKeyboard = OpenKeyboard;
     pKbd->CustomKeycodes = FALSE;
-    
-    pKbd->private = xcalloc(sizeof(BsdKbdPrivRec), 1);
+
+    pKbd->private = calloc(sizeof(BsdKbdPrivRec), 1);
     if (pKbd->private == NULL) {
        xf86Msg(X_ERROR,"can't allocate keyboard OS private data\n");
        return FALSE;
