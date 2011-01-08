@@ -85,9 +85,7 @@ typedef struct {
 
 typedef enum {
     PROT_STD,
-    PROT_XQUEUE,
     PROT_WSCONS,
-    PROT_USB,
     PROT_UNKNOWN_KBD
 } KbdProtocolId;
 
