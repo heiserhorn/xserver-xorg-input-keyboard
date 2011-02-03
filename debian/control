@@ -20,8 +20,12 @@ Vcs-Browser: http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-input-keyboar
 
 Package: xserver-xorg-input-kbd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${xinpdriver:Depends}
-Provides: ${xinpdriver:Provides}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ ${xinpdriver:Depends},
+Provides:
+ ${xinpdriver:Provides}
 Description: X.Org X server -- keyboard input driver
  This package provides the driver for keyboard input devices.
  .
