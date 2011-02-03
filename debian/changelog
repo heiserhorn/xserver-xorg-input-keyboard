@@ -11,6 +11,7 @@ xserver-xorg-input-keyboard (1:1.5.0-2) UNRELEASED; urgency=low
   * Update Uploaders list. Thanks, David & Brice!
   * Wrap Depends/Provides.
   * Bump Standards-Version to 3.9.1 (no changes needed).
+  * Remove obsolete NEWS file.
 
  -- Cyril Brulebois <kibi@debian.org>  Thu, 03 Feb 2011 04:56:35 +0100
 
