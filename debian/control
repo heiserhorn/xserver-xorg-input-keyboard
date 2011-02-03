@@ -2,29 +2,30 @@ Source: xserver-xorg-input-keyboard
 Section: x11
 Priority: optional
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
-Uploaders: David Nusinow <dnusinow@debian.org>, Drew Parsons <dparsons@debian.org>, Brice Goglin <bgoglin@debian.org>
+Uploaders: Drew Parsons <dparsons@debian.org>, Cyril Brulebois <kibi@debian.org>
 Build-Depends:
- debhelper (>= 5),
+ debhelper (>= 8),
+ dh-autoreconf,
  pkg-config,
- xserver-xorg-dev (>= 2:1.7.6.901),
+ xserver-xorg-dev (>= 2:1.9.4),
  x11proto-kb-dev,
  x11proto-input-dev,
  x11proto-core-dev,
  x11proto-randr-dev,
  quilt,
- dpkg-dev (>= 1.14.17),
- automake,
- libtool,
- xutils-dev (>= 1:7.5~1)
-Standards-Version: 3.8.3
+ xutils-dev (>= 1:7.5+4)
+Standards-Version: 3.9.1
 Vcs-Git: git://git.debian.org/git/pkg-xorg/driver/xserver-xorg-input-keyboard
 Vcs-Browser: http://git.debian.org/?p=pkg-xorg/driver/xserver-xorg-input-keyboard.git
 
 Package: xserver-xorg-input-kbd
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${xinpdriver:Depends}
-Provides: ${xinpdriver:Provides}
-Replaces: xserver-xorg (<< 6.8.2-35)
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ ${xinpdriver:Depends},
+Provides:
+ ${xinpdriver:Provides}
 Description: X.Org X server -- keyboard input driver
  This package provides the driver for keyboard input devices.
  .
