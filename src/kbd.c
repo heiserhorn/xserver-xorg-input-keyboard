@@ -81,11 +81,7 @@ _X_EXPORT InputDriverRec KEYBOARD = {
 };
 
 static const char *kbdDefaults[] = {
-#ifdef XQUEUE 
-    "Protocol",		"Xqueue",
-#else
     "Protocol",		"standard",
-#endif
     "XkbRules",		"base",
     "XkbModel",		"pc105",
     "XkbLayout",	"us",
@@ -94,11 +90,7 @@ static const char *kbdDefaults[] = {
 };
 
 static const char *kbd98Defaults[] = {
-#ifdef XQUEUE
-    "Protocol",		"Xqueue",
-#else
     "Protocol",		"standard",
-#endif
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
     "XkbLayout",	"jp",
