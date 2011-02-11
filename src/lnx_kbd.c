@@ -233,7 +233,7 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     f = fopen("/proc/sys/dev/mac_hid/keyboard_sends_linux_keycodes","r");
     if (f) {
         if (fgetc(f) == '0')
-            pKbd->CustomKeycodes = TRUE;
+            xf86ReplaceBoolOption(pInfo->options, "CustomKeycodes", TRUE);
         fclose(f);
     }
   }
