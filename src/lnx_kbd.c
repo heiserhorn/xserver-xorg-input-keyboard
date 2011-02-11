@@ -183,7 +183,6 @@ OpenKeyboard(InputInfoPtr pInfo)
            return FALSE;
     }
 
-    xf86Msg(X_CONFIG, "%s: Protocol: %s\n", pInfo->name, s);
     free(s);
 
     s = xf86SetStrOption(pInfo->options, "Device", NULL);
