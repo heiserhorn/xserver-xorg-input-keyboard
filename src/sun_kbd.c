@@ -518,8 +518,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
 
     pKbd->OpenKeyboard = OpenKeyboard;
 
-    pKbd->CustomKeycodes = FALSE;
-
     pKbd->private = calloc(sizeof(sunKbdPrivRec), 1);
     if (pKbd->private == NULL) {
        xf86Msg(X_ERROR,"can't allocate keyboard OS private data\n");

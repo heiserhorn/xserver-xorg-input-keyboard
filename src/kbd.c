@@ -85,7 +85,6 @@ static const char *kbdDefaults[] = {
     "XkbRules",		"base",
     "XkbModel",		"pc105",
     "XkbLayout",	"us",
-    "CustomKeycodes",	"off",
     NULL
 };
 
@@ -94,7 +93,6 @@ static const char *kbd98Defaults[] = {
     "XkbRules",		"xfree98",
     "XkbModel",		"pc98",
     "XkbLayout",	"jp",
-    "CustomKeycodes",	"off",
     NULL
 };
 
@@ -143,7 +141,6 @@ KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
 #endif
 {
     KbdDevPtr pKbd;
-    MessageType from = X_DEFAULT;
     char *s;
     const char **defaults;
     int rc = Success;
@@ -212,16 +209,8 @@ KbdPreInit(InputDriverPtr drv, InputInfoPtr pInfo, int flags)
     xkb_variant = xf86SetStrOption(pInfo->options, "XkbVariant", NULL);
     xkb_options = xf86SetStrOption(pInfo->options, "XkbOptions", NULL);
 
-  pKbd->CustomKeycodes = FALSE;
-  from = X_DEFAULT; 
-  if (xf86FindOption(pInfo->options, "CustomKeycodes")) {
-      pKbd->CustomKeycodes = xf86SetBoolOption(pInfo->options, "CustomKeycodes",
-                                               pKbd->CustomKeycodes);
-     from = X_CONFIG;
-  }
-
-  xf86Msg(from, "%s: CustomKeycodes %s\n",
-               pInfo->name, pKbd->CustomKeycodes ? "enabled" : "disabled");
+    pKbd->CustomKeycodes = xf86SetBoolOption(pInfo->options, "CustomKeycodes",
+                                             FALSE);
 
 out:
   return rc;

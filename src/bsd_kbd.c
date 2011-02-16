@@ -443,7 +443,6 @@ xf86OSKbdPreInit(InputInfoPtr pInfo)
     pKbd->RemapScanCode = NULL;
 
     pKbd->OpenKeyboard = OpenKeyboard;
-    pKbd->CustomKeycodes = FALSE;
 
     pKbd->private = calloc(sizeof(BsdKbdPrivRec), 1);
     if (pKbd->private == NULL) {
