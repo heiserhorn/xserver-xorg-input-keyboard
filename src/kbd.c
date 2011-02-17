@@ -276,51 +276,7 @@ KbdCtrl( DeviceIntPtr device, KeybdCtrl *ctrl)
 static void
 InitKBD(InputInfoPtr pInfo, Bool init)
 {
-  xEvent          kevent;
   KbdDevPtr pKbd = (KbdDevPtr) pInfo->private;
-#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 1
-  DeviceIntPtr    pKeyboard = pInfo->dev;
-  KeyClassRec     *keyc = pKeyboard->key;
-  KeySym          *map = keyc->curKeySyms.map;
-  unsigned int    i;
-#endif
-
-  kevent.u.keyButtonPointer.time = GetTimeInMillis();
-  kevent.u.keyButtonPointer.rootX = 0;
-  kevent.u.keyButtonPointer.rootY = 0;
-
-/* The server does this for us with i-h. */
-#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) < 1
-  /*
-   * Hmm... here is the biggest hack of every time !
-   * It may be possible that a switch-vt procedure has finished BEFORE
-   * you released all keys neccessary to do this. That peculiar behavior
-   * can fool the X-server pretty much, cause it assumes that some keys
-   * were not released. TWM may stuck alsmost completly....
-   * OK, what we are doing here is after returning from the vt-switch
-   * exeplicitely unrelease all keyboard keys before the input-devices
-   * are reenabled.
-   */
-  for (i = keyc->curKeySyms.minKeyCode, map = keyc->curKeySyms.map;
-       i < keyc->curKeySyms.maxKeyCode;
-       i++, map += keyc->curKeySyms.mapWidth)
-     if (KeyPressed(i))
-      {
-        switch (*map) {
-        /* Don't release the lock keys */
-        case XK_Caps_Lock:
-        case XK_Shift_Lock:
-        case XK_Num_Lock:
-        case XK_Scroll_Lock:
-        case XK_Kana_Lock:
-          break;
-        default:
-          kevent.u.u.detail = i;
-          kevent.u.u.type = KeyRelease;
-          (* pKeyboard->public.processInputProc)(&kevent, pKeyboard, 1);
-        }
-      }
-#endif
 
   pKbd->scanPrefix      = 0;
 
