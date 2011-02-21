@@ -1,8 +1,8 @@
-xserver-xorg-input-keyboard (1:1.5.99.901-1+exp1) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.5.99.901-1+exp1) experimental; urgency=low
 
   * Rebuild against Xserver 1.10 rc2.
 
- -- Cyril Brulebois <kibi@debian.org>  Mon, 21 Feb 2011 02:32:52 +0100
+ -- Cyril Brulebois <kibi@debian.org>  Mon, 21 Feb 2011 02:33:12 +0100
 
 xserver-xorg-input-keyboard (1:1.5.99.901-1) unstable; urgency=low
 
