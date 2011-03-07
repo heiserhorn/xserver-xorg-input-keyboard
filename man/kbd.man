@@ -22,8 +22,7 @@ driver formerly included in __xservername__.
 .PP
 The
 .B kbd
-driver functions as a keyboard input device, and may be used as the
-X server's core keyboard.
+driver functions as a keyboard input device.
 .SH CONFIGURATION DETAILS
 .PP
 Depending on the X server version in use, input device options may be set
