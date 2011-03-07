@@ -1,3 +1,40 @@
+commit 0b9cd5121e1025e95a7e32addb675ab874bc6cb1
+Author: Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Tue Mar 8 09:38:29 2011 +1000
+
+    keyboard 1.6.0
+    
+    Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+
+commit 24ee4f6738955d507f500a90fda8153f19dd5038
+Author: Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon Mar 7 12:05:48 2011 +1000
+
+    man: explain what grp_led:scroll does in the example conf section
+    
+    Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+    Reviewed by: Magnus Kessler <Magnus.Kessler@gmx.net>
+
+commit d5634b77b578721e2bb2734f5fd92090e9d4c330
+Author: Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon Mar 7 11:35:44 2011 +1000
+
+    man: list xorg.conf.d snippets as possible configuration location
+    
+    Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+    Reviewed by: Magnus Kessler <Magnus.Kessler@gmx.net>
+
+commit 89358c49e519c7a1e0f9a9544f9c03b5d9c2115d
+Author: Peter Hutterer <peter.hutterer@who-t.net>
+Date:   Mon Mar 7 11:34:21 2011 +1000
+
+    man: don't mention the core keyboard.
+    
+    Core devices are an obsolete concept these days.
+    
+    Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+    Reviewed by: Magnus Kessler <Magnus.Kessler@gmx.net>
+
 commit 6496bb21074faff2642e09389b5476225dc4fdb3
 Author: Peter Hutterer <peter.hutterer@who-t.net>
 Date:   Mon Feb 21 09:59:14 2011 +1000
