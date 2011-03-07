@@ -95,7 +95,8 @@ The following xorg.conf fragment ensures that user will be able to switch betwee
 .I us
 and
 .I sk
-layouts by pressing the "menu" key.
+layouts by pressing the "menu" key. The scroll lock LED shows which layout
+is currently active.
 .PP
 The
 .B XkbVariant
