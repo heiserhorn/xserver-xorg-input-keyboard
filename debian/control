@@ -33,3 +33,16 @@ Description: X.Org X server -- keyboard input driver
  <URL:http://www.X.org>
  .
  This package is built from the X.org xf86-input-keyboard driver module.
+
+Package: xserver-xorg-input-kbd-udeb
+XC-Package-Type: udeb
+Section: debian-installer
+Architecture: hurd-any kfreebsd-any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ ${xinpdriver:Depends},
+Provides:
+ ${xinpdriver:Provides}
+Description: X.Org X server -- keyboard input driver
+ This is a udeb, or a microdeb, for the debian-installer.
