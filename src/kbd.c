@@ -385,6 +385,9 @@ KbdProc(DeviceIntPtr device, int what)
     pKbd->KbdOff(pInfo, what);
     device->public.on = FALSE;
     break;
+
+  default:
+    return BadValue;
   }
   return (Success);
 }
