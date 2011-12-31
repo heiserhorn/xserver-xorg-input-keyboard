@@ -1,3 +1,9 @@
+xserver-xorg-input-keyboard (1:1.6.0-3+exp1) UNRELEASED; urgency=low
+
+  * Build against Xserver 1.12 RC1.
+
+ -- Cyril Brulebois <kibi@debian.org>  Sat, 31 Dec 2011 17:45:18 +0100
+
 xserver-xorg-input-keyboard (1:1.6.0-3) unstable; urgency=low
 
   * Upload to unstable.
