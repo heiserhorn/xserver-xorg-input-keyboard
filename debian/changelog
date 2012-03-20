@@ -1,8 +1,8 @@
-xserver-xorg-input-keyboard (1:1.6.1-1) UNRELEASED; urgency=low
+xserver-xorg-input-keyboard (1:1.6.1-1) unstable; urgency=low
 
   * New upstream release.
 
- -- Cyril Brulebois <kibi@debian.org>  Tue, 20 Mar 2012 21:06:54 +0000
+ -- Cyril Brulebois <kibi@debian.org>  Tue, 20 Mar 2012 21:08:24 +0000
 
 xserver-xorg-input-keyboard (1:1.6.0-3) unstable; urgency=low
 
