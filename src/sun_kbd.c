@@ -497,6 +497,8 @@ OpenKeyboard(InputInfoPtr pInfo)
 		    kbdPath);
 	pInfo->read_input = ReadInput;
 	ret = TRUE;
+	/* in case it wasn't set and we fell back to default */
+	xf86ReplaceStrOption(pInfo->options, "Device", kbdPath);
     }
 
     free(kbdPath);
