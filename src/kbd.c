@@ -38,6 +38,10 @@
 #include "xf86OSKbd.h"
 #include "compiler.h"
 
+#include "exevents.h"
+#include <X11/Xatom.h>
+#include "xserver-properties.h"
+
 #include "xkbstr.h"
 #include "xkbsrv.h"
 
@@ -328,6 +332,21 @@ KbdProc(DeviceIntPtr device, int what)
                  return BadValue;
              }
          }
+# ifdef XI_PROP_DEVICE_NODE
+         {
+             const char *device_node =
+                 xf86CheckStrOption(pInfo->options, "Device", NULL);
+
+             if (device_node)
+             {
+                 Atom prop_device = MakeAtom(XI_PROP_DEVICE_NODE,
+                                             strlen(XI_PROP_DEVICE_NODE), TRUE);
+                 XIChangeDeviceProperty(device, prop_device, XA_STRING, 8,
+                                        PropModeReplace, strlen(device_node),
+                                        device_node, FALSE);
+             }
+         }
+# endif /* XI_PROP_DEVICE_NODE */
 #else
          {
              XkbComponentNamesRec xkbnames;
@@ -391,9 +410,9 @@ PostKbdEvent(InputInfoPtr pInfo, unsigned int scanCode, Bool down)
   int state;
 
 #ifdef DEBUG
-  ErrorF("kbd driver rec scancode: 0x02%x %s\n", scanCode, down?"down":"up");
+  LogMessageVerbSigSafe(X_INFO, -1, "kbd driver rec scancode: 0x%x %s\n", scanCode, down ? "down" : "up");
 #endif
-	  
+
   /*
    * First do some special scancode remapping ...
    */
